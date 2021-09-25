@@ -29,7 +29,7 @@ public class GameManager implements ActionListener {
     public Timer getTimer() {
         return timer;
     }
-/**/
+
     public GameManager(Block[][] tetrisBlocks, Player player) {
         this.tetrisBlocks = tetrisBlocks;
         this.player = player;
@@ -41,7 +41,6 @@ public class GameManager implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        player.updateFields();
         collision();
         if (circumvention) {
             gravity();
@@ -118,6 +117,7 @@ public class GameManager implements ActionListener {
         if (lines > 0) {
             moveEverythingDown(row, lines);
         }
+        updateElements(lines);
     }
 
     private void removeRow(Block[] block) {
@@ -127,8 +127,6 @@ public class GameManager implements ActionListener {
     }
 
     private void moveEverythingDown(int rows, int lines) {
-        player.increaseScore(lines);
-        updateDelay();
         for (int row = rows - lines; row > 0; row--) {
             for (int collum = 0; collum < 12; collum++) {
                 Tetromino tetromino = tetrisBlocks[row][collum].getTetromino();
@@ -136,6 +134,12 @@ public class GameManager implements ActionListener {
                 tetrisBlocks[row + lines][collum].setTetromino(tetromino);
             }
         }
+    }
+
+    private void updateElements(int lines) {
+        player.increaseScore(lines);
+        player.updateFields();
+        updateDelay();
     }
 
     private void updateDelay() {
