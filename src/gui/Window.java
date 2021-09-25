@@ -1,5 +1,6 @@
 package gui;
 
+import com.company.KeybindingLoader;
 import gui.menu.GameMenu;
 import manager.GameState;
 import player.Player;
@@ -21,6 +22,7 @@ public class Window extends JFrame implements ComponentListener {
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setPreferredSize(new Dimension(800, 1000));
 
+        KeybindingLoader.loadKeybindings();
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
         addMenu();
