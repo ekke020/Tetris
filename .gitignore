@@ -3,3 +3,4 @@ Tetris.iml
 .idea
 .git
 .DS_Store
+bindings-cache.txt
