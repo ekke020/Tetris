@@ -48,24 +48,23 @@ public class GameFrame extends JPanel {
     }
 
     private void addKeyBindings() {
-        KeyBinder.addKeyBinding(this, KeybindingLoader.MOVE_LEFT, "left", false, (evt) -> {
-            gameMovement.moveLeft();
-        });
-        KeyBinder.addKeyBinding(this, KeybindingLoader.MOVE_RIGHT, "right", false, (evt) -> {
-            gameMovement.moveRight();
-        });
-        KeyBinder.addKeyBinding(this, KeybindingLoader.SPIN, "spin", false, (evt) -> {
-            gameMovement.spin();
-        });
-        KeyBinder.addKeyBinding(this, KeybindingLoader.SOFT_DROP, "softDrop", false, (evt) -> {
-            gameMovement.softDrop(true);
-        });
-        KeyBinder.addKeyBinding(this, KeybindingLoader.SOFT_DROP, "softDropRelease", true, (evt) -> {
-            gameMovement.softDrop(false);
-        });
-        KeyBinder.addKeyBinding(this, KeybindingLoader.HARD_DROP, "hardDrop", false, (evt) -> {
-            gameMovement.hardDrop();
-        });
+        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_LEFT"),
+                "left", false, (evt) -> gameMovement.moveLeft());
+
+        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_RIGHT"),
+                "right", false, (evt) -> gameMovement.moveRight());
+
+        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SPIN"),
+                "spin", false, (evt) -> gameMovement.spin());
+
+        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SOFT_DROP"),
+                "softDrop", false, (evt) -> gameMovement.softDrop(true));
+
+        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SOFT_DROP"),
+                "softDropRelease", true, (evt) -> gameMovement.softDrop(false));
+
+        KeyBinder.addKeyBinding(this,KeybindingLoader.getKeybinding("HARD_DROP"),
+                "hardDrop", false, (evt) -> gameMovement.hardDrop());
     }
 
     public void switchStates() {
