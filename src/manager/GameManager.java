@@ -36,6 +36,7 @@ public class GameManager implements ActionListener {
         delay = GameStats.getGameSpeed(player.getLevel());
         timer = new Timer(delay, this);
         currentTetromino = player.loadNewTetromino();
+        player.updateFields();
         timer.start();
     }
 
@@ -45,8 +46,8 @@ public class GameManager implements ActionListener {
         if (circumvention) {
             gravity();
         } else {
-            scanRows();
             currentTetromino = player.loadNewTetromino();
+            scanRows();
             circumvention = true;
         }
     }
@@ -135,7 +136,6 @@ public class GameManager implements ActionListener {
             }
         }
     }
-
     private void updateElements(int lines) {
         player.increaseScore(lines);
         player.updateFields();
@@ -148,7 +148,7 @@ public class GameManager implements ActionListener {
     }
 
     public void updateCurrentTetromino() {
-        scanRows();
         currentTetromino = player.loadNewTetromino();
+        scanRows();
     }
 }
