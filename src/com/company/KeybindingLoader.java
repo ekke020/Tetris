@@ -2,27 +2,54 @@ package com.company;
 
 import java.awt.event.KeyEvent;
 import java.io.*;
+import java.util.HashMap;
 
-public class KeybindingLoader {
+public class KeybindingLoader implements java.io.Serializable {
 
     private static final String KEYBINDINGS = "bindings-cache.txt";
-    public final static int MOVE_LEFT = KeyEvent.VK_LEFT;
-    public final static int MOVE_RIGHT = KeyEvent.VK_RIGHT;
-    public final static int SPIN = KeyEvent.VK_SPACE;
-    public final static int SOFT_DROP = KeyEvent.VK_DOWN;
-    public final static int HARD_DROP = KeyEvent.VK_UP;
 
-    private static void loadKeybindings() throws IOException {
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(KEYBINDINGS))) {
-            String key = reader.readLine();
+    private static HashMap<String, Integer> keybindings;
+    private static final HashMap<String, Integer>  defaultKeybindings = new HashMap<>();
+
+    static {
+        defaultKeybindings.put("MOVE_LEFT", KeyEvent.VK_LEFT);
+        defaultKeybindings.put("MOVE_RIGHT", KeyEvent.VK_RIGHT);
+        defaultKeybindings.put("SPIN", KeyEvent.VK_SPACE);
+        defaultKeybindings.put("SOFT_DROP", KeyEvent.VK_DOWN);
+        defaultKeybindings.put("HARD_DROP", KeyEvent.VK_UP);
+    }
+
+    public static int getKeybinding(String key) {
+        return keybindings.get(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void loadKeybindings() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(KEYBINDINGS))) {
+            keybindings = (HashMap<String, Integer>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Failed to read from file....");
+            keybindings.putAll(defaultKeybindings);
+            try {
+                createKeybindings();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
     private static void createKeybindings() throws IOException {
-
-        try (FileWriter bindings = new FileWriter(KEYBINDINGS)) {
-            bindings.write(KEYBINDINGS);
+        System.out.println("Creating a new " + KEYBINDINGS);
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(KEYBINDINGS))){
+            out.writeObject(defaultKeybindings);
         }
     }
+
+    public static void saveKeybindings() throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(KEYBINDINGS))){
+            out.writeObject(keybindings);
+        }
+    }
+
 }
