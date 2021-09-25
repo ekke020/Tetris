@@ -84,7 +84,6 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
         int row = getNewRowNumber();
         for (int[] coordinates : getCurrentTetrominoCoordinates()) {
             coordinates[0] += row;
-            System.out.println(coordinates[0]);
         }
         getCurrentTetromino().setCoordinates(getCurrentTetrominoCoordinates());
         gameManager.setCurrentTetrominoInBlock(true);
