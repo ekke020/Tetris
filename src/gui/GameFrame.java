@@ -12,7 +12,6 @@ import java.awt.*;
 
 public class GameFrame extends JPanel {
 
-    private final GameMovement gameMovement;
     private final GameManager gameManager;
     private Block[][] tetrisBlocks;
 
@@ -24,7 +23,6 @@ public class GameFrame extends JPanel {
         Timer updateTimer = new Timer(10, e -> repaint());
         updateTimer.start();
         gameManager = new GameManager(tetrisBlocks, player);
-        gameMovement = new GameMovement(gameManager, tetrisBlocks);
         addKeyBindings();
     }
 
@@ -49,6 +47,8 @@ public class GameFrame extends JPanel {
     }
 
     private void addKeyBindings() {
+        GameMovement gameMovement = new GameMovement(gameManager, tetrisBlocks);
+
         KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_LEFT"),
                 "left", false, (evt) -> gameMovement.moveLeft());
 
