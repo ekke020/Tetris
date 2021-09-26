@@ -9,7 +9,7 @@ public class KeybindingLoader implements java.io.Serializable {
     private static final String KEYBINDINGS = "bindings-cache.txt";
 
 
-    private static HashMap<String, Integer> keybindings;
+    private static HashMap<String, Integer> keybindings= new HashMap<>();
     private static final HashMap<String, Integer>  defaultKeybindings = new HashMap<>();
 
     static {
