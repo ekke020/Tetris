@@ -1,5 +1,6 @@
 package gui;
 
+import gui.menu.MainMenu;
 import keybinds.KeybindingLoader;
 import gui.menu.GameMenu;
 import manager.GameState;
@@ -11,6 +12,8 @@ import java.awt.*;
 public class Window extends JFrame {
 
     private final GridBagConstraints gc;
+
+    private MainMenu mainMenu;
     private GameMenu gameMenu;
     private GameFrame gameFrame;
     private Player player;
@@ -31,7 +34,17 @@ public class Window extends JFrame {
 
         setVisible(true);
     }
+    private void addMainMenu() {
+        mainMenu = new MainMenu();
 
+        gc.gridx = 0;
+        gc.gridy = 0;
+        gc.fill = GridBagConstraints.BOTH;
+        gc.weightx = 1;
+        gc.weighty = 0.1;
+
+        add(mainMenu, gc);
+    }
     private void addNewPlayer() {
         player = new Player();
         player.setPlayerListener(e ->
