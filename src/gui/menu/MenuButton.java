@@ -1,6 +1,6 @@
 package gui.menu;
 
-import manager.KeyBinder;
+import keybinds.KeyBinder;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -12,7 +12,6 @@ public class MenuButton extends JButton implements ChangeListener {
 
     public MenuButton(String text) {
         super(text);
-        setBorderPainted(false);
         setFocusPainted(false);
         setOpaque(true);
         setRolloverEnabled(true);
@@ -34,6 +33,6 @@ public class MenuButton extends JButton implements ChangeListener {
             setBackground(new Color(107, 196, 255, 255));
             setForeground(new Color(229, 232, 255, 200));
         }
-
     }
+
 }
