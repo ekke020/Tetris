@@ -1,5 +1,7 @@
 package gui.menu;
 
+import keybinds.KeybindingLoader;
+import keybinds.KeyBinder;
 import tetromino.Tetromino;
 
 import javax.swing.*;
@@ -68,6 +70,10 @@ public class GameMenu extends JPanel {
 
     private void addButtonOne() {
         MenuButton button = new MenuButton("Pause");
+        KeyBinder.addKeyBinding(button, KeybindingLoader.getKeybinding("PAUSE"), "pause", true, e -> {
+            MenuClicks mc = new MenuClicks(this, 0, (MenuButton) e.getSource());
+            menuListener.formEventOccurred(mc);
+        });
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
