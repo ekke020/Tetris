@@ -1,6 +1,7 @@
 package gui;
 
-import com.company.KeybindingLoader;
+import keybinds.KeyBinder;
+import keybinds.KeybindingLoader;
 import manager.*;
 import player.Player;
 
