@@ -1,4 +1,4 @@
-package com.company;
+package keybinds;
 
 import java.awt.event.KeyEvent;
 import java.io.*;

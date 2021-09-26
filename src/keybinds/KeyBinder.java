@@ -1,4 +1,4 @@
-package manager;
+package keybinds;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
