@@ -1,16 +1,14 @@
 package gui;
 
-import com.company.KeybindingLoader;
+import keybinds.KeybindingLoader;
 import gui.menu.GameMenu;
 import manager.GameState;
 import player.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
-public class Window extends JFrame implements ComponentListener {
+public class Window extends JFrame {
 
     private final GridBagConstraints gc;
     private GameMenu gameMenu;
@@ -74,23 +72,4 @@ public class Window extends JFrame implements ComponentListener {
         add(gameMenu, gc);
     }
 
-    @Override
-    public void componentResized(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent e) {
-
-    }
 }
