@@ -1,8 +1,9 @@
 package gui;
 
-import gui.menu.MainMenu;
+import gui.frames.GameFrame;
+import gui.menu.game.GameMenu;
+import gui.menu.main.MainMenu;
 import keybinds.KeybindingLoader;
-import gui.menu.GameMenu;
 import manager.GameState;
 import player.Player;
 

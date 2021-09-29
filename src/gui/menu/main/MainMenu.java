@@ -1,6 +1,9 @@
-package gui.menu;
+package gui.menu.main;
 
 import gui.ComponentResizeListener;
+import gui.menu.MenuButton;
+import gui.menu.MenuClicks;
+import gui.menu.MenuListener;
 
 import javax.swing.*;
 import java.awt.*;
