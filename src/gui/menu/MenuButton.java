@@ -10,6 +10,12 @@ import java.awt.event.KeyEvent;
 
 public class MenuButton extends JButton implements ChangeListener {
 
+    private final Color backgroundColor = new Color(107, 196, 255, 255);
+    private final Color foreGroundColor = new Color(229, 232, 255, 200);
+    private final Color rolloverBackgroundColor = new Color(78, 158, 206, 255);
+    private final Color rolloverForegroundColor = new Color(183, 205, 244, 255);
+    private final Color pressedColor = new Color(55, 109, 138, 255);
+
     public MenuButton(String text) {
         super(text);
         setFocusPainted(false);
@@ -17,8 +23,10 @@ public class MenuButton extends JButton implements ChangeListener {
         setRolloverEnabled(true);
         setBorder(BorderFactory.createEmptyBorder());
 
-        setBackground(new Color(107, 196, 255, 255));
-        setForeground(new Color(229, 232, 255, 200));
+        setBackground(backgroundColor);
+        setForeground(foreGroundColor);
+
+        UIManager.put("Button.select", pressedColor);
         setFont(new Font("Serif", Font.BOLD, 26));
 
         addChangeListener(this);
@@ -28,13 +36,14 @@ public class MenuButton extends JButton implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         if (getModel().isPressed()) {
-            setBackground(new Color(70, 140, 182, 255));
-        } else if (getModel().isRollover()) {
-            setBackground(new Color(78, 158, 206, 255));
-            setForeground(new Color(183, 205, 244, 255));
+            setBackground(pressedColor);
+        }
+        else if (getModel().isRollover()) {
+            setBackground(rolloverBackgroundColor);
+            setForeground(rolloverForegroundColor);
         } else {
-            setBackground(new Color(107, 196, 255, 255));
-            setForeground(new Color(229, 232, 255, 200));
+            setBackground(backgroundColor);
+            setForeground(foreGroundColor);
         }
     }
 
