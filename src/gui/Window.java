@@ -21,7 +21,6 @@ public class Window extends JFrame {
 
     public Window() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setPreferredSize(new Dimension(800, 1000));
 
         ImageIcon image = new ImageIcon("assets/FrameIcon.jpg");
