@@ -12,7 +12,6 @@ import java.awt.*;
 public class Window extends JFrame {
 
     private final GridBagConstraints gc;
-    private ImageIcon image = new ImageIcon("assets/FrameIcon.jpg");
 
     private MainMenu mainMenu;
     private GameMenu gameMenu;
@@ -23,15 +22,14 @@ public class Window extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setPreferredSize(new Dimension(800, 1000));
+
+        ImageIcon image = new ImageIcon("assets/FrameIcon.jpg");
         setIconImage(image.getImage());
 
         KeybindingLoader.loadKeybindings();
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
 
-//        addMenu();
-//        addNewPlayer();
-//        addNewGame();
         addMainMenu();
 
         pack();
@@ -39,7 +37,6 @@ public class Window extends JFrame {
 
         setVisible(true);
     }
-
     private void addMainMenu() {
         mainMenu = new MainMenu();
         mainMenu.setMenuListener(e -> {
@@ -49,14 +46,14 @@ public class Window extends JFrame {
                     addMenu();
                     addNewPlayer();
                     addNewGame();
-                    revalidate();
-                    repaint();
                 }
                 case 1 -> {
-
+                    remove(mainMenu);
                 }
 
             }
+            revalidate();
+            repaint();
         });
         gc.gridx = 0;
         gc.gridy = 0;
