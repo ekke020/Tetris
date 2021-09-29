@@ -11,6 +11,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+// TODO: MAKE THE MENU DYNAMIC. -> (MAINMENU)
+// KNOWN ISSUES: BUG WITH THE BUTTONS WHEN HOVERING OVER THEM.
+
 public class GameMenu extends JPanel {
 
     private Showcase showcase;
