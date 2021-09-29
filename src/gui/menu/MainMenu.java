@@ -16,7 +16,7 @@ public class MainMenu extends JPanel {
     private final MenuButton[] buttonList = new MenuButton[3];
 
     public MainMenu() {
-        setBackground(Color.BLACK);
+        setBackground(new Color(12, 180, 203));
         setPreferredSize(new Dimension(784,961));
 
         setLayout(new GridBagLayout());
@@ -24,11 +24,10 @@ public class MainMenu extends JPanel {
         addNewGameButton();
         addOptionsButton();
         addHighScoreButton();
-
         addComponentListener(new ComponentResizeListener() {
             @Override
             public void resizeTimedOut() {
-               setComponentSizes();
+                setComponentSizes();
             }
         });
     }
@@ -122,10 +121,15 @@ public class MainMenu extends JPanel {
 
         add(button, gc);
     }
+
     private void setComponentSizes() {
         for (MenuButton button : buttonList){
             button.setPreferredSize(new Dimension(getWidth() / 3, getHeight() / 16));
         }
         SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    public void setMenuListener(MenuListener menuListener) {
+        this.menuListener = menuListener;
     }
 }
