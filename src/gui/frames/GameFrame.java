@@ -1,5 +1,6 @@
 package gui.frames;
 
+import colors.Colors;
 import gui.Block;
 import keybinds.KeyBinder;
 import keybinds.KeybindingLoader;
@@ -19,10 +20,13 @@ public class GameFrame extends JPanel {
     public GameFrame(Player player) {
         setLayout(new GridLayout(24, 12));
         addBorder();
-        setBackground(Color.WHITE);
+        setBackground(Colors.BACKGROUND_COLOR);
+
         createBoard();
+
         Timer updateTimer = new Timer(10, e -> repaint());
         updateTimer.start();
+
         gameManager = new GameManager(tetrisBlocks, player);
         addKeyBindings();
     }

@@ -1,5 +1,6 @@
 package gui.menu.main;
 
+import colors.Colors;
 import gui.ComponentResizeListener;
 import gui.menu.MenuButton;
 import gui.menu.MenuClicks;
@@ -19,7 +20,7 @@ public class MainMenu extends JPanel {
     private final MenuButton[] buttonList = new MenuButton[3];
 
     public MainMenu() {
-        setBackground(new Color(12, 180, 203));
+        setBackground(Colors.BACKGROUND_COLOR);
         setPreferredSize(new Dimension(784,961));
 
         setLayout(new GridBagLayout());

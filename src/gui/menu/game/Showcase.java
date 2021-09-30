@@ -1,5 +1,6 @@
 package gui.menu.game;
 
+import colors.Colors;
 import gui.Block;
 import tetromino.*;
 
@@ -12,9 +13,8 @@ public class Showcase extends JPanel {
 
     public Showcase() {
         setLayout(new GridLayout(4, 6));
-        Color borderColor = new Color(91, 228, 247, 97);
-        setBorder(BorderFactory.createLineBorder(borderColor, 2));
-        setBackground(new Color(5, 226, 255, 255));
+        setBorder(BorderFactory.createLineBorder(Colors.BORDER_COLOR, 2));
+        setBackground(Colors.MISC_BACKGROUND);
         createBoard();
     }
 

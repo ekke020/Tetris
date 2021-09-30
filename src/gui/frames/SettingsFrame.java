@@ -1,5 +1,6 @@
 package gui.frames;
 
+import colors.Colors;
 import gui.menu.MenuButton;
 import gui.menu.MenuListener;
 import gui.menu.settings.BindingPanel;
@@ -13,7 +14,7 @@ public class SettingsFrame extends JPanel {
     private GridBagConstraints gc;
 
     public SettingsFrame() {
-        setBackground(new Color(64, 64, 64));
+        setBackground(Colors.BACKGROUND_COLOR);
         setPreferredSize(new Dimension(784,961));
 
         setLayout(new GridBagLayout());

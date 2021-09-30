@@ -1,5 +1,6 @@
 package gui.menu.game;
 
+import colors.Colors;
 import gui.menu.MenuButton;
 import gui.menu.MenuClicks;
 import gui.menu.MenuListener;
@@ -16,7 +17,6 @@ import java.awt.event.ActionListener;
 
 
 // TODO: MAKE THE MENU DYNAMIC. -> (MAINMENU)
-// KNOWN ISSUES: BUG WITH THE BUTTONS WHEN HOVERING OVER THEM.
 
 public class GameMenu extends JPanel {
 
@@ -27,7 +27,7 @@ public class GameMenu extends JPanel {
 
     public GameMenu() {
 
-        setBackground(new Color(17, 218, 245, 96));
+        setBackground(Colors.BACKGROUND_COLOR);
         addBorder();
         setLayout(new GridBagLayout());
         addTetrominoWindow();
@@ -38,8 +38,10 @@ public class GameMenu extends JPanel {
     }
 
     private void addBorder() {
-        Border raisedBevel = BorderFactory.createSoftBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY);
-        Border loweredBevel = BorderFactory.createSoftBevelBorder(BevelBorder.LOWERED, Color.GRAY, Color.GRAY);
+        Border raisedBevel = BorderFactory.createSoftBevelBorder(BevelBorder.RAISED,
+                Colors.BORDER_COLOR, Colors.BORDER_COLOR);
+        Border loweredBevel = BorderFactory.createSoftBevelBorder(BevelBorder.LOWERED,
+                Colors.BORDER_COLOR, Colors.BORDER_COLOR);
 
         Border compound = BorderFactory.createCompoundBorder(
                 raisedBevel, loweredBevel);

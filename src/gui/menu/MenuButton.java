@@ -1,5 +1,6 @@
 package gui.menu;
 
+import colors.Colors;
 import keybinds.KeyBinder;
 
 import javax.swing.*;
@@ -10,12 +11,6 @@ import java.awt.event.KeyEvent;
 
 public class MenuButton extends JButton implements ChangeListener {
 
-    private final Color backgroundColor = new Color(107, 196, 255, 255);
-    private final Color foreGroundColor = new Color(229, 232, 255, 200);
-    private final Color rolloverBackgroundColor = new Color(78, 158, 206, 255);
-    private final Color rolloverForegroundColor = new Color(183, 205, 244, 255);
-    private final Color pressedColor = new Color(55, 109, 138, 255);
-
     public MenuButton(String text) {
         super(text);
         setFocusPainted(false);
@@ -23,10 +18,10 @@ public class MenuButton extends JButton implements ChangeListener {
         setRolloverEnabled(true);
         setBorder(BorderFactory.createEmptyBorder());
 
-        setBackground(backgroundColor);
-        setForeground(foreGroundColor);
+        setBackground(Colors.BUTTON_BACKGROUND_COLOR);
+        setForeground(Colors.BUTTON_FOREGROUND_COLOR);
 
-        UIManager.put("Button.select", pressedColor);
+        UIManager.put("Button.select", Colors.PRESSED_COLOR);
         setFont(new Font("Serif", Font.BOLD, 26));
 
         addChangeListener(this);
@@ -36,14 +31,14 @@ public class MenuButton extends JButton implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         if (getModel().isPressed()) {
-            setBackground(pressedColor);
+            setBackground(Colors.PRESSED_COLOR);
         }
         else if (getModel().isRollover()) {
-            setBackground(rolloverBackgroundColor);
-            setForeground(rolloverForegroundColor);
+            setBackground(Colors.ROLLOVER_BACKGROUND_COLOR);
+            setForeground(Colors.ROLLOVER_FOREGROUND_COLOR);
         } else {
-            setBackground(backgroundColor);
-            setForeground(foreGroundColor);
+            setBackground(Colors.BUTTON_BACKGROUND_COLOR);
+            setForeground(Colors.BUTTON_FOREGROUND_COLOR);
         }
     }
 

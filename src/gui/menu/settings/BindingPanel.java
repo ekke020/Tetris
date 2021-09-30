@@ -1,5 +1,6 @@
 package gui.menu.settings;
 
+import colors.Colors;
 import gui.menu.MenuButton;
 import keybinds.KeybindingLoader;
 
@@ -10,12 +11,14 @@ import java.awt.event.KeyEvent;
 
 public class BindingPanel extends JPanel {
 
-    Color foreGround = new Color(230, 230, 230, 255);
 
     public BindingPanel() {
         setOpaque(false);
         Font titleFont = new Font("Serif", Font.BOLD, 26);
-        setBorder(BorderFactory.createTitledBorder(this.getBorder(),"Keybindings", TitledBorder.LEFT, TitledBorder.ABOVE_TOP, titleFont, foreGround));
+        setBorder(BorderFactory.createTitledBorder(
+                this.getBorder(),"Keybindings", TitledBorder.LEFT,
+                TitledBorder.ABOVE_TOP, titleFont, Colors.FOREGROUND_COLOR));
+
         setLayout(new GridLayout(5,1));
 
         addRow("Move left","MOVE_LEFT");
@@ -26,20 +29,20 @@ public class BindingPanel extends JPanel {
 
     }
 
-    private void addRow(String text, String keybind) {
+    private void addRow(String text, String keybinding) {
         JPanel row = new JPanel();
         row.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         row.setOpaque(false);
 
-        String key = KeyEvent.getKeyText(KeybindingLoader.getKeybinding(keybind));
+        String key = KeyEvent.getKeyText(KeybindingLoader.getKeybinding(keybinding));
         JTextField information = new JTextField(14);
 
-        information.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230, 255), 5));
+        information.setBorder(BorderFactory.createLineBorder(Colors.FOREGROUND_COLOR, 5));
         information.setText(text + "\t=> " + key);
 
         information.setFont(new Font("Serif", Font.BOLD, 26));
-        information.setForeground(new Color(230, 230, 230, 255));
-        information.setBackground(new Color(64, 64, 64, 255));
+        information.setForeground(Colors.FOREGROUND_COLOR);
+        information.setBackground(Colors.BACKGROUND_COLOR);
 
         information.setEditable(false);
         information.setFocusable(false);
