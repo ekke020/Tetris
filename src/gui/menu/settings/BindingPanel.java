@@ -11,50 +11,79 @@ import java.awt.event.KeyEvent;
 
 public class BindingPanel extends JPanel {
 
+    private GridBagConstraints gc;
+    private Font keyFont;
 
-    public BindingPanel() {
+    private final MenuButton[] buttonList = new MenuButton[5];
+    private final JLabel[] keyList = new JLabel[5];
+
+    private final int buttonWidth;
+    private final int buttonHeight;
+
+    public BindingPanel(int width, int height) {
+        setLayout(new GridBagLayout());
+        setPreferredSize(new Dimension(width, height));
         setOpaque(false);
-        Font titleFont = new Font("Serif", Font.BOLD, 26);
+
+        buttonWidth = width / 2;
+        buttonHeight = height / 10;
+        keyFont = new Font("Serif", Font.BOLD, width / 15);
+
+        Font titleFont = new Font("Serif", Font.BOLD, width / 15);
         setBorder(BorderFactory.createTitledBorder(
                 this.getBorder(),"Keybindings", TitledBorder.LEFT,
                 TitledBorder.ABOVE_TOP, titleFont, Colors.FOREGROUND_COLOR));
 
-        setLayout(new GridLayout(5,1));
-
-        addRow("Move left","MOVE_LEFT");
-        addRow("Move right","MOVE_RIGHT");
-        addRow("Spin","SPIN");
-        addRow("Soft drop","SOFT_DROP");
-        addRow("hard drop","HARD_DROP");
-
+        justButtons("Move left","MOVE_LEFT", 0);
+        justButtons("Move right","MOVE_RIGHT", 1);
+        justButtons("Spin","SPIN", 2);
+        justButtons("Soft drop","SOFT_DROP", 3);
+        justButtons("hard drop","HARD_DROP", 4);
     }
 
-    private void addRow(String text, String keybinding) {
-        JPanel row = new JPanel();
-        row.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        row.setOpaque(false);
-
+    private void justButtons(String text, String keybinding, int gridy) {
         String key = KeyEvent.getKeyText(KeybindingLoader.getKeybinding(keybinding));
-        JTextField information = new JTextField(14);
+        gc = new GridBagConstraints();
+        gc.gridx = 0;
+        gc.gridy = gridy;
 
-        information.setBorder(BorderFactory.createLineBorder(Colors.FOREGROUND_COLOR, 5));
-        information.setText(text + "\t=> " + key);
+        gc.fill = GridBagConstraints.NONE;
+        gc.anchor = GridBagConstraints.LINE_START;
 
-        information.setFont(new Font("Serif", Font.BOLD, 26));
-        information.setForeground(Colors.FOREGROUND_COLOR);
-        information.setBackground(Colors.BACKGROUND_COLOR);
+        gc.weighty = 0.1;
 
-        information.setEditable(false);
-        information.setFocusable(false);
+        MenuButton rebind = new MenuButton(text,buttonWidth, buttonHeight);
+        rebind.addActionListener(e -> System.out.println(key));
+        buttonList[gridy] = rebind;
+        add(rebind, gc);
 
-        row.add(information);
-        add(row);
 
-        MenuButton rebind = new MenuButton("Rebind");
-        rebind.setPreferredSize(new Dimension(20, 20));
-        rebind.addActionListener(e -> {
-            System.out.println(key);
-        });
-        add(rebind);
+        gc.gridx = 1;
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.weightx = 0.3;
+        
+        JLabel keybind = new JLabel(key);
+        keybind.setFont(keyFont);
+        keyList[gridy] = keybind;
+        add(keybind, gc);
+    }
+
+    @Override
+    public void setPreferredSize(Dimension preferredSize) {
+        super.setPreferredSize(preferredSize);
+        if (this.getBorder() != null) {
+            int size = (int) (preferredSize.getWidth() / 15);
+            ((javax.swing.border.TitledBorder) getBorder()).setTitleFont(new Font("Serif", Font.BOLD, size));
+
+            int width = (int) (preferredSize.getWidth() / 2);
+            int height = (int) (preferredSize.getHeight() / 10);
+            for (MenuButton button : buttonList){
+                button.setPreferredSize(new Dimension(width, height));
+            }
+            for (JLabel keybind : keyList) {
+                keybind.setFont(new Font("Serif", Font.BOLD, size));
+            }
+        }
+
     }
 }
