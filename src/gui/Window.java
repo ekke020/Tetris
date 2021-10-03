@@ -1,8 +1,6 @@
 package gui;
 
 import gui.frames.SettingsFrame;
-import gui.menu.MenuClicks;
-import gui.menu.MenuListener;
 import gui.menu.main.MainMenu;
 import keybinds.KeybindingLoader;
 
@@ -14,7 +12,6 @@ public class Window extends JFrame {
     private final GridBagConstraints gc;
 
     private MainMenu mainMenu;
-    private NewGame newGame;
     private SettingsFrame settingsFrame;
 
     public Window() {
@@ -28,16 +25,15 @@ public class Window extends JFrame {
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
 
-        addMainMenu();
-
         pack();
+        addMainMenu();
         setLocationRelativeTo(null);
 
         setVisible(true);
     }
 
     private void addMainMenu() {
-        mainMenu = new MainMenu();
+        mainMenu = new MainMenu(getWidth() - 16, getHeight() - 39);
         mainMenu.setMenuListener(e -> {
             switch (e.getId()) {
                 case 0 -> {
@@ -64,7 +60,7 @@ public class Window extends JFrame {
     }
 
     private void addNewGame() {
-        newGame = new NewGame();
+        NewGame newGame = new NewGame();
 
         gc.gridx = 0;
         gc.gridy = 0;
@@ -77,7 +73,7 @@ public class Window extends JFrame {
     }
 
     private void addSettings() {
-        settingsFrame = new SettingsFrame();
+        settingsFrame = new SettingsFrame(getWidth() - 16, getHeight() - 39);
         settingsFrame.setMenuListener(e -> {
             remove(settingsFrame);
             addMainMenu();
