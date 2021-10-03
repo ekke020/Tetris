@@ -5,7 +5,7 @@ import java.awt.*;
 public class Colors {
 
     // Panels
-    public static final Color BACKGROUND_COLOR = new Color(64, 64, 64, 255);
+    public static final Color BACKGROUND_COLOR = new Color(0, 0, 0, 255);
     public static final Color FOREGROUND_COLOR = new Color(230, 230, 230, 255);
     public static final Color BORDER_COLOR = Color.GRAY;
 
