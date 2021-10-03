@@ -1,6 +1,7 @@
 package gui;
 
 import gui.frames.GameFrame;
+import gui.menu.MenuButton;
 import gui.menu.game.GameMenu;
 import manager.GameState;
 import player.Player;
@@ -23,6 +24,12 @@ public class NewGame extends JPanel {
         addMenu();
         addNewPlayer();
         addNewGame();
+        addComponentListener(new ComponentResizeListener() {
+            @Override
+            public void resizeTimedOut() {
+                setComponentSizes();
+            }
+        });
     }
 
     private void addNewPlayer() {
@@ -70,4 +77,9 @@ public class NewGame extends JPanel {
         add(gameMenu, gc);
     }
 
+    // TODO: Add components to be resized.
+    private void setComponentSizes() {
+        // Update all the component sizes here.
+        SwingUtilities.updateComponentTreeUI(this);
+    }
 }
