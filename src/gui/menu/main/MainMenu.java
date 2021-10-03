@@ -16,13 +16,15 @@ public class MainMenu extends JPanel {
     private MenuListener menuListener;
     private GridBagConstraints gc;
 
-    private TetrisLogo tetrisLogo;
     private final MenuButton[] buttonList = new MenuButton[3];
-
-    public MainMenu() {
+    private final int buttonWidth;
+    private final int buttonHeight;
+    
+    public MainMenu(int width, int height) {
         setBackground(Colors.BACKGROUND_COLOR);
-        setPreferredSize(new Dimension(784,961));
-
+        setPreferredSize(new Dimension(width, height));
+        buttonWidth = width / 3;
+        buttonHeight = height / 16;
         setLayout(new GridBagLayout());
         addLogo();
         addNewGameButton();
@@ -37,7 +39,7 @@ public class MainMenu extends JPanel {
     }
 
     private void addLogo() {
-        tetrisLogo = new TetrisLogo();
+        TetrisLogo tetrisLogo = new TetrisLogo();
         gc = new GridBagConstraints();
 
         gc.gridx = 0;
@@ -52,7 +54,7 @@ public class MainMenu extends JPanel {
         add(tetrisLogo, gc);
     }
     private void addNewGameButton() {
-        MenuButton button = new MenuButton("New Game");
+        MenuButton button = new MenuButton("New Game", buttonWidth, buttonHeight);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +79,7 @@ public class MainMenu extends JPanel {
     }
 
     private void addOptionsButton() {
-        MenuButton button = new MenuButton("Options");
+        MenuButton button = new MenuButton("Options", buttonWidth, buttonHeight);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -102,7 +104,7 @@ public class MainMenu extends JPanel {
     }
 
     private void addHighScoreButton() {
-        MenuButton button = new MenuButton("High score");
+        MenuButton button = new MenuButton("High score", buttonWidth, buttonHeight);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
