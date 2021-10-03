@@ -53,7 +53,9 @@ public class BindingPanel extends JPanel {
         gc.weighty = 0.1;
 
         MenuButton rebind = new MenuButton(text,buttonWidth, buttonHeight);
-        rebind.addActionListener(e -> System.out.println(key));
+        rebind.addActionListener(e -> {
+            new KeybindingInput(this);
+        });
         buttonList[gridy] = rebind;
         add(rebind, gc);
 
