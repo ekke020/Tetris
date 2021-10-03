@@ -78,7 +78,7 @@ public class GameMenu extends JPanel {
     }
 
     private void addButtonOne() {
-        MenuButton button = new MenuButton("Pause");
+        MenuButton button = new MenuButton("Pause",261, 60);
         KeyBinder.addKeyBinding(button, KeybindingLoader.getKeybinding("PAUSE"), "pause", true, e -> {
             MenuClicks mc = new MenuClicks(this, 0, (MenuButton) e.getSource());
             menuListener.formEventOccurred(mc);
@@ -105,7 +105,7 @@ public class GameMenu extends JPanel {
     }
 
     private void addButtonTwo() {
-        MenuButton button = new MenuButton("Exit");
+        MenuButton button = new MenuButton("Exit",261, 60);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
