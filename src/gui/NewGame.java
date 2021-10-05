@@ -1,7 +1,6 @@
 package gui;
 
 import gui.frames.GameFrame;
-import gui.menu.MenuButton;
 import gui.menu.game.GameMenu;
 import manager.GameState;
 import player.Player;
@@ -17,11 +16,10 @@ public class NewGame extends JPanel {
     private GameFrame gameFrame;
     private Player player;
 
-    public NewGame() {
+    public NewGame(int width, int height) {
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
-
-        addMenu();
+        addMenu((width / 5) * 2, height);
         addNewPlayer();
         addNewGame();
         addComponentListener(new ComponentResizeListener() {
@@ -52,8 +50,8 @@ public class NewGame extends JPanel {
         add(gameFrame, gc);
     }
 
-    private void addMenu() {
-        gameMenu = new GameMenu();
+    private void addMenu(int width, int height) {
+        gameMenu = new GameMenu(width, height);
         gameMenu.setMenuListener(e -> {
             switch (e.getId()) {
                 case 0 -> {
@@ -79,7 +77,8 @@ public class NewGame extends JPanel {
 
     // TODO: Add components to be resized.
     private void setComponentSizes() {
-        // Update all the component sizes here.
+        gameFrame.setPreferredSize(new Dimension((getWidth() / 5) * 3, getHeight()));
+        gameMenu.setPreferredSize(new Dimension((getWidth() / 5) * 2, getHeight()));
         SwingUtilities.updateComponentTreeUI(this);
     }
 }
