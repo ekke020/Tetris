@@ -24,6 +24,14 @@ public class KeybindingLoader implements java.io.Serializable {
         return keybindings.get(key);
     }
 
+    public static void setKeybinding(String key, int keyCode) {
+        keybindings.put(key, keyCode);
+    }
+
+    public static boolean keybindingContains(int keyCode) {
+        return keybindings.containsValue(keyCode);
+    }
+
     @SuppressWarnings("unchecked")
     public static void loadKeybindings() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(KEYBINDINGS))) {
