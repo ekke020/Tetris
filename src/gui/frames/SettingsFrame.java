@@ -20,7 +20,6 @@ public class SettingsFrame extends JPanel {
 
     public SettingsFrame(int width, int height) {
         setBackground(Colors.BACKGROUND_COLOR);
-        setPreferredSize(new Dimension(width, height));
 
         setLayout(new GridBagLayout());
 
