@@ -25,15 +25,16 @@ public class GameMenu extends JPanel {
     private GridBagConstraints gc;
     private MenuListener menuListener;
 
-    public GameMenu() {
+    public GameMenu(int width, int height) {
 
+        setPreferredSize(new Dimension(width, height));
         setBackground(Colors.BACKGROUND_COLOR);
         addBorder();
         setLayout(new GridBagLayout());
         addTetrominoWindow();
         addScoreField();
-        addButtonOne();
-        addButtonTwo();
+        addButtonOne(width / 2, height / 16);
+        addButtonTwo(width / 2, height / 16);
 
     }
 
@@ -77,8 +78,8 @@ public class GameMenu extends JPanel {
         add(fields, gc);
     }
 
-    private void addButtonOne() {
-        MenuButton button = new MenuButton("Pause",261, 60);
+    private void addButtonOne(int width, int height) {
+        MenuButton button = new MenuButton("Pause", width, height);
         KeyBinder.addKeyBinding(button, KeybindingLoader.getKeybinding("PAUSE"), "pause", true, e -> {
             MenuClicks mc = new MenuClicks(this, 0, (MenuButton) e.getSource());
             menuListener.formEventOccurred(mc);
@@ -99,13 +100,13 @@ public class GameMenu extends JPanel {
         gc.ipady = 20;
         gc.insets = new Insets(10, 10, 0, 10);
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.fill = GridBagConstraints.NONE;
         add(button, gc);
 
     }
 
-    private void addButtonTwo() {
-        MenuButton button = new MenuButton("Exit",261, 60);
+    private void addButtonTwo(int width, int height) {
+        MenuButton button = new MenuButton("Exit", width, height);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -122,7 +123,7 @@ public class GameMenu extends JPanel {
         gc.ipady = 20;
         gc.insets = new Insets(10, 10, 0, 10);
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.fill = GridBagConstraints.NONE;
         add(button, gc);
     }
 
