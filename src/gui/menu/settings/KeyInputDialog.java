@@ -64,6 +64,7 @@ public class KeyInputDialog extends JDialog implements KeyListener {
         else if (!KeybindingLoader.keybindingContains(e.getKeyCode())) {
             KeybindingLoader.setKeybinding(keybinding, e.getKeyCode());
             keybindingLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+            KeybindingLoader.saveKeybindings();
             dispose();
         } else {
             label.setText("<html><div style='text-align: center;'>Key is used<br/>Pick a different key</div></html>");
