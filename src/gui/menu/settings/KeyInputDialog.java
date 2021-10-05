@@ -1,6 +1,8 @@
 package gui.menu.settings;
 
 import colors.Colors;
+import keybinds.KeyBinder;
+import keybinds.KeybindingLoader;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -10,13 +12,20 @@ import java.awt.event.KeyListener;
 
 public class KeybindingInput extends JDialog implements KeyListener {
 
-    public KeybindingInput(Component parentComponent) {
+    private final String keybinding;
+    private final JLabel keybindingLabel;
+    private final JLabel label;
+    
+    public KeybindingInput(Component parentComponent, String keybinding, JLabel keybindingLabel) {
+        this.keybindingLabel = keybindingLabel;
         setUndecorated(true);
         setModalityType(ModalityType.APPLICATION_MODAL);
         setPreferredSize(new Dimension(parentComponent.getWidth() / 2,parentComponent.getHeight() / 6));
         addKeyListener(this);
-        Font titleFont = new Font("Serif", Font.BOLD, parentComponent.getWidth() / 15);
 
+        Font titleFont = new Font("Serif", Font.BOLD, parentComponent.getWidth() / 20);
+
+        this.keybinding = keybinding;
         JPanel panel = new JPanel();
         panel.setBorder(new LineBorder(Colors.BORDER_COLOR, 2));
         panel.setBackground(Colors.MISC_BACKGROUND);
@@ -25,10 +34,11 @@ public class KeybindingInput extends JDialog implements KeyListener {
         JTextField keybindingField = new JTextField(1);
         keybindingField.setBackground(Colors.MISC_BACKGROUND);
 
-        JLabel keybinding = new JLabel("Press a key");
-        keybinding.setFont(titleFont);
+        label = new JLabel("Press a key");
+        label.setFont(titleFont);
+        label.setForeground(Colors.FOREGROUND_COLOR);
 
-        panel.add(keybinding);
+        panel.add(label);
         add(panel);
 
         pack();
@@ -48,9 +58,16 @@ public class KeybindingInput extends JDialog implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // Change the keybind here!
-        System.out.println(e.getKeyCode());
-        dispose();
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            dispose();
+        }
+        else if (!KeybindingLoader.keybindingContains(e.getKeyCode())) {
+            KeybindingLoader.setKeybinding(keybinding, e.getKeyCode());
+            keybindingLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+            dispose();
+        } else {
+            label.setText("<html><div style='text-align: center;'>Key is used<br/>Pick a different key</div></html>");
+        }
     }
 
 }
