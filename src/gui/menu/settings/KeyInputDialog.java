@@ -10,13 +10,13 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class KeybindingInput extends JDialog implements KeyListener {
+public class KeyInputDialog extends JDialog implements KeyListener {
 
     private final String keybinding;
     private final JLabel keybindingLabel;
     private final JLabel label;
-    
-    public KeybindingInput(Component parentComponent, String keybinding, JLabel keybindingLabel) {
+
+    public KeyInputDialog(Component parentComponent, String keybinding, JLabel keybindingLabel) {
         this.keybindingLabel = keybindingLabel;
         setUndecorated(true);
         setModalityType(ModalityType.APPLICATION_MODAL);
