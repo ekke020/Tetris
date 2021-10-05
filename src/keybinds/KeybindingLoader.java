@@ -32,6 +32,7 @@ public class KeybindingLoader implements java.io.Serializable {
         return keybindings.containsValue(keyCode);
     }
 
+    //TODO: Refactor all the methods using try catch blocks!
     @SuppressWarnings("unchecked")
     public static void loadKeybindings() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(KEYBINDINGS))) {
@@ -54,9 +55,11 @@ public class KeybindingLoader implements java.io.Serializable {
         }
     }
 
-    public static void saveKeybindings() throws IOException {
+    public static void saveKeybindings() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(KEYBINDINGS))){
             out.writeObject(keybindings);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
