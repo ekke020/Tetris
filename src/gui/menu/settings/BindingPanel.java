@@ -15,7 +15,7 @@ public class BindingPanel extends JPanel {
     private Font keyFont;
 
     private final MenuButton[] buttonList = new MenuButton[5];
-    private final JLabel[] keyList = new JLabel[5];
+    private final JLabel[] keybindingLabelList = new JLabel[5];
 
     private final int buttonWidth;
     private final int buttonHeight;
@@ -34,14 +34,14 @@ public class BindingPanel extends JPanel {
                 this.getBorder(),"Keybindings", TitledBorder.LEFT,
                 TitledBorder.ABOVE_TOP, titleFont, Colors.FOREGROUND_COLOR));
 
-        justButtons("Move left","MOVE_LEFT", 0);
-        justButtons("Move right","MOVE_RIGHT", 1);
-        justButtons("Spin","SPIN", 2);
-        justButtons("Soft drop","SOFT_DROP", 3);
-        justButtons("hard drop","HARD_DROP", 4);
+        keybindingButton("Move left","MOVE_LEFT", 0);
+        keybindingButton("Move right","MOVE_RIGHT", 1);
+        keybindingButton("Spin","SPIN", 2);
+        keybindingButton("Soft drop","SOFT_DROP", 3);
+        keybindingButton("hard drop","HARD_DROP", 4);
     }
 
-    private void justButtons(String text, String keybinding, int gridy) {
+    private void keybindingButton(String text, String keybinding, int gridy) {
         String key = KeyEvent.getKeyText(KeybindingLoader.getKeybinding(keybinding));
         gc = new GridBagConstraints();
         gc.gridx = 0;
@@ -54,7 +54,7 @@ public class BindingPanel extends JPanel {
 
         MenuButton rebind = new MenuButton(text,buttonWidth, buttonHeight);
         rebind.addActionListener(e -> {
-            new KeybindingInput(this);
+            new KeyInputDialog(this, keybinding, keybindingLabelList[gridy]);
         });
         buttonList[gridy] = rebind;
         add(rebind, gc);
@@ -64,10 +64,11 @@ public class BindingPanel extends JPanel {
         gc.anchor = GridBagConstraints.CENTER;
         gc.weightx = 0.3;
         
-        JLabel keybind = new JLabel(key);
-        keybind.setFont(keyFont);
-        keyList[gridy] = keybind;
-        add(keybind, gc);
+        JLabel keybindingLabel = new JLabel(key);
+        keybindingLabel.setFont(keyFont);
+        keybindingLabel.setForeground(Colors.FOREGROUND_COLOR);
+        keybindingLabelList[gridy] = keybindingLabel;
+        add(keybindingLabel, gc);
     }
 
     @Override
@@ -82,8 +83,8 @@ public class BindingPanel extends JPanel {
             for (MenuButton button : buttonList){
                 button.setPreferredSize(new Dimension(width, height));
             }
-            for (JLabel keybind : keyList) {
-                keybind.setFont(new Font("Serif", Font.BOLD, size));
+            for (JLabel label : keybindingLabelList) {
+                label.setFont(new Font("Serif", Font.BOLD, size));
             }
         }
 
