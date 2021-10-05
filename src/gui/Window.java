@@ -60,7 +60,7 @@ public class Window extends JFrame {
     }
 
     private void addNewGame() {
-        NewGame newGame = new NewGame();
+        NewGame newGame = new NewGame(getWidth() - 16, getHeight() - 39);
 
         gc.gridx = 0;
         gc.gridy = 0;
