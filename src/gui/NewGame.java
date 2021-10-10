@@ -19,9 +19,9 @@ public class NewGame extends JPanel {
     public NewGame(int width, int height) {
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
-        addMenu((width / 5) * 2, height);
+        addMenu((int) (width * 0.38), height);
         addNewPlayer();
-        addNewGame();
+        addNewGame((int) (width * 0.62), height);
         addComponentListener(new ComponentResizeListener() {
             @Override
             public void resizeTimedOut() {
@@ -37,8 +37,8 @@ public class NewGame extends JPanel {
         );
     }
 
-    private void addNewGame() {
-        gameFrame = new GameFrame(player);
+    private void addNewGame(int width, int height) {
+        gameFrame = new GameFrame(player, width, height);
         gc.gridx = 1;
         gc.gridy = 0;
 
@@ -46,7 +46,7 @@ public class NewGame extends JPanel {
         gc.weighty = 0;
 
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.fill = GridBagConstraints.BOTH;
+        gc.fill = GridBagConstraints.NONE;
         add(gameFrame, gc);
     }
 
@@ -70,15 +70,15 @@ public class NewGame extends JPanel {
         gc.weighty = 0.1;
 
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.fill = GridBagConstraints.BOTH;
+        gc.fill = GridBagConstraints.NONE;
 
         add(gameMenu, gc);
     }
 
     // TODO: Add components to be resized.
     private void setComponentSizes() {
-        gameFrame.setPreferredSize(new Dimension((getWidth() / 5) * 3, getHeight()));
-        gameMenu.setPreferredSize(new Dimension((getWidth() / 5) * 2, getHeight()));
+        gameFrame.setPreferredSize(new Dimension((int) (getWidth()  * 0.62), getHeight()));
+        gameMenu.setPreferredSize(new Dimension((int) (getWidth() * 0.38), getHeight()));
         SwingUtilities.updateComponentTreeUI(this);
     }
 }
