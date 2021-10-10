@@ -24,6 +24,7 @@ public class GameMenu extends JPanel {
     private ScoreFields fields;
     private GridBagConstraints gc;
     private MenuListener menuListener;
+    private final MenuButton[] buttonList = new MenuButton[2];
 
     public GameMenu(int width, int height) {
 
@@ -33,8 +34,8 @@ public class GameMenu extends JPanel {
         setLayout(new GridBagLayout());
         addTetrominoWindow();
         addScoreField();
-        addButtonOne(width / 2, height / 16);
-        addButtonTwo(width / 2, height / 16);
+        addButtonOne((int) (width * 0.90), height / 16);
+        addButtonTwo((int) (width * 0.90), height / 16);
 
     }
 
@@ -70,10 +71,11 @@ public class GameMenu extends JPanel {
         gc.gridx = 0;
         gc.gridy = 1;
         gc.weightx = 0;
-        gc.weighty = 0.02;
+        gc.weighty = 0.5;
         gc.ipady = 0;
-        gc.insets = new Insets(10, 10, 0, 10);
-        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+//        gc.insets = new Insets(10, 10, 0, 10);
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.fill = GridBagConstraints.NONE;
         fields = new ScoreFields();
         add(fields, gc);
     }
@@ -98,9 +100,10 @@ public class GameMenu extends JPanel {
         gc.weightx = 0;
         gc.weighty = 0;
         gc.ipady = 20;
-        gc.insets = new Insets(10, 10, 0, 10);
-        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+//        gc.insets = new Insets(10, 0, 0, 0);
+        gc.anchor = GridBagConstraints.CENTER;
         gc.fill = GridBagConstraints.NONE;
+        buttonList[0] = button;
         add(button, gc);
 
     }
@@ -119,11 +122,12 @@ public class GameMenu extends JPanel {
         gc.gridx = 0;
         gc.gridy = 3;
         gc.weightx = 0;
-        gc.weighty = 0.2;
+        gc.weighty = 0.09;
         gc.ipady = 20;
-        gc.insets = new Insets(10, 10, 0, 10);
-        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+//        gc.insets = new Insets(10, 10, 0, 10);
+        gc.anchor = GridBagConstraints.CENTER;
         gc.fill = GridBagConstraints.NONE;
+        buttonList[1] = button;
         add(button, gc);
     }
 
@@ -136,5 +140,18 @@ public class GameMenu extends JPanel {
         showcase.repaint();
         fields.updateFields(level, score, lines);
         fields.repaint();
+    }
+
+    @Override
+    public void setPreferredSize(Dimension preferredSize) {
+        super.setPreferredSize(preferredSize);
+        if (buttonList[0] != null) {
+            int width = (int) (preferredSize.getWidth() * 0.9);
+            int height = (int) (preferredSize.getHeight() / 16);
+            for (MenuButton button : buttonList){
+                button.setPreferredSize(new Dimension(width, height));
+            }
+//            fields.setPreferredSize(new Dimension());
+        }
     }
 }
