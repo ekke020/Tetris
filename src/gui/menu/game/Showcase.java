@@ -11,8 +11,9 @@ public class Showcase extends JPanel {
 
     private Block[][] windowBlocks;
 
-    public Showcase() {
+    public Showcase(int width, int height) {
         setLayout(new GridLayout(4, 6));
+        setPreferredSize(new Dimension(width, height));
         setBorder(BorderFactory.createLineBorder(Colors.BORDER_COLOR, 2));
         setBackground(Colors.MISC_BACKGROUND);
         createBoard();

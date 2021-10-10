@@ -13,7 +13,7 @@ public class TextField extends JTextField {
         setEditable(false);
         setFocusable(false);
         setBorder(BorderFactory.createMatteBorder(topSize, leftSize, bottomSize, rightSize, Colors.BORDER_COLOR));
-        setFont(new Font("Serif", Font.BOLD, 26));
+        setFont(new Font("Serif", Font.BOLD, 24));
         setBackground(Colors.MISC_BACKGROUND);
         setForeground(Colors.FOREGROUND_COLOR);
         setHorizontalAlignment(alignment);

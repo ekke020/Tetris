@@ -8,8 +8,9 @@ public class ScoreFields extends JPanel {
     private final TextField[] textFields = new TextField[6];
 
 
-    public ScoreFields() {
+    public ScoreFields(int width, int height) {
         setLayout(new GridLayout(3, 2));
+        setPreferredSize(new Dimension(width, height));
         setOpaque(false);
 
         textFields[0] = new TextField("LEVEL", 4, 2, 4, 0, SwingConstants.LEFT);
@@ -33,12 +34,15 @@ public class ScoreFields extends JPanel {
         textFields[3].setText(String.valueOf(score));
         textFields[5].setText(String.valueOf(lines));
     }
+
     @Override
     public void setPreferredSize(Dimension preferredSize) {
         super.setPreferredSize(preferredSize);
-        System.out.println(getWidth());
-        for (TextField textField : textFields) {
-//            textField.setColumns();
+        if (textFields[0] != null) {
+            int fontSize = (int) (preferredSize.getHeight() / 5);
+            for (TextField textField : textFields) {
+                textField.setFont(new Font("Serif", Font.BOLD, fontSize));
+            }
         }
     }
 }
