@@ -17,11 +17,11 @@ public class GameFrame extends JPanel {
     private final GameManager gameManager;
     private Block[][] tetrisBlocks;
 
-    public GameFrame(Player player) {
+    public GameFrame(Player player, int width, int height) {
         setLayout(new GridLayout(24, 12));
         addBorder();
         setBackground(Colors.BACKGROUND_COLOR);
-
+        setPreferredSize(new Dimension(width, height));
         createBoard();
 
         Timer updateTimer = new Timer(10, e -> repaint());
@@ -74,6 +74,7 @@ public class GameFrame extends JPanel {
     }
 
     public void switchStates() {
+        System.out.println("Width: " + tetrisBlocks[0][0].getWidth() + "\nHeight: " + tetrisBlocks[0][0].getHeight());
         switch (GameState.getGameState()) {
             case PAUSE -> gameManager.getTimer().stop();
             case PLAY -> gameManager.getTimer().start();
