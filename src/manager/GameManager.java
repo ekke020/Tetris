@@ -2,11 +2,16 @@ package manager;
 
 import gui.Block;
 import player.Player;
+import sound.AudioPlayer;
+import sound.SoundPaths;
 import tetromino.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static sound.SoundPaths.LINE_CLEARED;
+import static sound.SoundPaths.TETROMINO_LANDING;
 
 public class GameManager implements ActionListener {
 
@@ -66,6 +71,7 @@ public class GameManager implements ActionListener {
             }
             if (rowCoordinate == 23 || stop) {
                 circumvention = false;
+                new AudioPlayer(TETROMINO_LANDING.getPath(),false, TETROMINO_LANDING.getVolume()).play();
                 break;
             }
         }
@@ -135,6 +141,7 @@ public class GameManager implements ActionListener {
                 tetrisBlocks[row + lines][collum].setTetromino(tetromino);
             }
         }
+        new AudioPlayer(LINE_CLEARED.getPath(), false, LINE_CLEARED.getVolume()).play();
     }
     private void updateElements(int lines) {
         player.increaseScore(lines);
