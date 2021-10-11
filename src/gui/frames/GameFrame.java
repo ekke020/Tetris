@@ -6,16 +6,20 @@ import keybinds.KeyBinder;
 import keybinds.KeybindingLoader;
 import manager.*;
 import player.Player;
+import sound.AudioPlayer;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 
+import static sound.SoundPaths.*;
+
 public class GameFrame extends JPanel {
 
     private final GameManager gameManager;
     private Block[][] tetrisBlocks;
+    private final AudioPlayer ap;
 
     public GameFrame(Player player, int width, int height) {
         setLayout(new GridLayout(24, 12));
@@ -29,6 +33,8 @@ public class GameFrame extends JPanel {
 
         gameManager = new GameManager(tetrisBlocks, player);
         addKeyBindings();
+        ap = new AudioPlayer(TETRIS_GAME_SOUND.getPath(), true, TETRIS_GAME_SOUND.getVolume());
+        ap.play();
     }
 
     private void createBoard() {
@@ -55,13 +61,13 @@ public class GameFrame extends JPanel {
         GameMovement gameMovement = new GameMovement(gameManager, tetrisBlocks);
 
         KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_LEFT"),
-                "left", false, (evt) -> gameMovement.moveLeft());
+                "left", true, (evt) -> gameMovement.moveLeft());
 
         KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_RIGHT"),
-                "right", false, (evt) -> gameMovement.moveRight());
+                "right", true, (evt) -> gameMovement.moveRight());
 
         KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SPIN"),
-                "spin", false, (evt) -> gameMovement.spin());
+                "spin", true, (evt) -> gameMovement.spin());
 
         KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SOFT_DROP"),
                 "softDrop", false, (evt) -> gameMovement.softDrop(true));
@@ -76,8 +82,15 @@ public class GameFrame extends JPanel {
     public void switchStates() {
         System.out.println("Width: " + tetrisBlocks[0][0].getWidth() + "\nHeight: " + tetrisBlocks[0][0].getHeight());
         switch (GameState.getGameState()) {
-            case PAUSE -> gameManager.getTimer().stop();
-            case PLAY -> gameManager.getTimer().start();
+            case PAUSE -> {
+                gameManager.getTimer().stop();
+                new AudioPlayer(PAUSE.getPath(), false, PAUSE.getVolume()).play();
+                ap.pause();
+            }
+            case PLAY -> {
+                gameManager.getTimer().start();
+                ap.start();
+            }
         }
     }
 }
