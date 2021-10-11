@@ -1,10 +1,14 @@
 package player;
 
 import manager.GameStats;
+import sound.AudioPlayer;
 import tetromino.Tetromino;
 
+import javax.sound.sampled.AudioInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static sound.SoundPaths.LEVEL_UP;
 
 public class Player {
 
@@ -46,6 +50,7 @@ public class Player {
         boolean levelUp = GameStats.levelUp(level, lines);
         if (levelUp) {
             level++;
+            new AudioPlayer(LEVEL_UP.getPath(), false, LEVEL_UP.getVolume()).play();
         }
     }
 
