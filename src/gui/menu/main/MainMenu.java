@@ -5,16 +5,21 @@ import gui.ComponentResizeListener;
 import gui.menu.MenuButton;
 import gui.menu.MenuClicks;
 import gui.menu.MenuListener;
+import sound.AudioPlayer;
+import sound.SoundPaths;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static sound.SoundPaths.TETRIS_MENU_SOUND;
+
 public class MainMenu extends JPanel {
 
     private MenuListener menuListener;
     private GridBagConstraints gc;
+    private final AudioPlayer ap;
 
     private final MenuButton[] buttonList = new MenuButton[3];
     private final int buttonWidth;
@@ -36,6 +41,9 @@ public class MainMenu extends JPanel {
                 setComponentSizes();
             }
         });
+
+        ap = new AudioPlayer(TETRIS_MENU_SOUND.getPath(), true, TETRIS_MENU_SOUND.getVolume());
+        ap.play();
     }
 
     private void addLogo() {
@@ -58,6 +66,7 @@ public class MainMenu extends JPanel {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                ap.close();
                 MenuClicks mc = new MenuClicks(this, 0);
                 menuListener.formEventOccurred(mc);
             }
