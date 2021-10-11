@@ -26,6 +26,7 @@ public class MenuButton extends JButton implements ChangeListener {
 
         addChangeListener(this);
         KeyBinder.removeKeyBinding(this, KeyEvent.VK_SPACE, "none", false);
+        KeyBinder.removeKeyBinding(this, KeyEvent.VK_SPACE, "none", true);
     }
 
     @Override
