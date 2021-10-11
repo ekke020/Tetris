@@ -1,19 +1,29 @@
 package manager;
 
 import gui.Block;
+import sound.AudioPlayer;
+import sound.SoundPaths;
 import tetromino.Tetromino;
+
+import static sound.SoundPaths.*;
 
 public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
 
     public void moveLeft() {
         if (isMoveLegal(-1)) {
             move(-1);
+            new AudioPlayer(TETROMINO_MOVE.getPath(), false, TETROMINO_MOVE.getVolume()).play();
+        } else {
+            new AudioPlayer(TETROMINO_MOVE_DENIED.getPath(), false, TETROMINO_MOVE_DENIED.getVolume()).play();
         }
     }
 
     public void moveRight() {
         if (isMoveLegal(1)) {
             move(1);
+            new AudioPlayer(TETROMINO_MOVE.getPath(), false, TETROMINO_MOVE.getVolume()).play();
+        } else {
+            new AudioPlayer(TETROMINO_MOVE_DENIED.getPath(), false, TETROMINO_MOVE_DENIED.getVolume()).play();
         }
     }
 
@@ -49,6 +59,7 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
             getCurrentTetromino().setCoordinates(updatedCoordinates);
             gameManager.setCurrentTetrominoInBlock(true);
             getCurrentTetromino().incrementSpinCounter();
+            new AudioPlayer(TETROMINO_SPIN.getPath(), false, TETROMINO_SPIN.getVolume()).play();
         }
     }
 
@@ -88,6 +99,7 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
         getCurrentTetromino().setCoordinates(getCurrentTetrominoCoordinates());
         gameManager.setCurrentTetrominoInBlock(true);
         gameManager.updateCurrentTetromino();
+        new AudioPlayer(TETROMINO_LANDING.getPath(),false, TETROMINO_LANDING.getVolume()).play();
     }
 
     private int getNewRowNumber() {
