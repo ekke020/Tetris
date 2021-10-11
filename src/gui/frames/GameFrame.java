@@ -76,7 +76,7 @@ public class GameFrame extends JPanel {
                 "softDropRelease", true, (evt) -> gameMovement.softDrop(false));
 
         KeyBinder.addKeyBinding(this,KeybindingLoader.getKeybinding("HARD_DROP"),
-                "hardDrop", false, (evt) -> gameMovement.hardDrop());
+                "hardDrop", true, (evt) -> gameMovement.hardDrop());
     }
 
     public void switchStates() {
