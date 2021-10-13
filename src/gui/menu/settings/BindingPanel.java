@@ -11,8 +11,7 @@ import java.awt.event.KeyEvent;
 
 public class BindingPanel extends JPanel {
 
-    private GridBagConstraints gc;
-    private Font keyFont;
+    private final Font keyFont;
 
     private final MenuButton[] buttonList = new MenuButton[5];
     private final JLabel[] keybindingLabelList = new JLabel[5];
@@ -43,7 +42,7 @@ public class BindingPanel extends JPanel {
 
     private void keybindingButton(String text, String keybinding, int gridy) {
         String key = KeyEvent.getKeyText(KeybindingLoader.getKeybinding(keybinding));
-        gc = new GridBagConstraints();
+        GridBagConstraints gc = new GridBagConstraints();
         gc.gridx = 0;
         gc.gridy = gridy;
 
