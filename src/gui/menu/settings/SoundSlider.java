@@ -19,10 +19,7 @@ public class SoundSlider extends JSlider {
         Border emptyBorder = BorderFactory.createEmptyBorder();
         setBorder(BorderFactory.createTitledBorder(emptyBorder, title,
                 TitledBorder.LEFT, TitledBorder.ABOVE_TOP, titleFont, Colors.FOREGROUND_COLOR));
-        addChangeListener(e -> {
-            int soundLevel = getValue();
-            System.out.println(soundLevel);
-        });
+
     }
 
 }
