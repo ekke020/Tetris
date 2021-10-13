@@ -13,13 +13,12 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 
-import static sound.SoundPaths.*;
 
 public class GameFrame extends JPanel {
 
     private final GameManager gameManager;
     private Block[][] tetrisBlocks;
-    private final AudioPlayer ap;
+
 
     public GameFrame(Player player, int width, int height) {
         setLayout(new GridLayout(24, 12));
@@ -33,8 +32,7 @@ public class GameFrame extends JPanel {
 
         gameManager = new GameManager(tetrisBlocks, player);
         addKeyBindings();
-        ap = new AudioPlayer(TETRIS_GAME_SOUND.getPath(), true, TETRIS_GAME_SOUND.getVolume());
-        ap.play();
+
     }
 
     private void createBoard() {
@@ -84,12 +82,12 @@ public class GameFrame extends JPanel {
         switch (GameState.getGameState()) {
             case PAUSE -> {
                 gameManager.getTimer().stop();
-                new AudioPlayer(PAUSE.getPath(), false, PAUSE.getVolume()).play();
-                ap.pause();
+                AudioPlayer.play(AudioPlayer.PAUSE);
+                AudioPlayer.pauseBackgroundMusic();
             }
             case PLAY -> {
                 gameManager.getTimer().start();
-                ap.start();
+                AudioPlayer.resumeBackgroundMusic();
             }
         }
     }

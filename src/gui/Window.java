@@ -8,15 +8,13 @@ import sound.AudioPlayer;
 import javax.swing.*;
 import java.awt.*;
 
-import static sound.SoundPaths.TETRIS_MENU_SOUND;
-
 public class Window extends JFrame {
 
     private final GridBagConstraints gc;
-    private final AudioPlayer ap;
 
     private MainMenu mainMenu;
     private SettingsFrame settingsFrame;
+
 
     public Window() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -34,8 +32,7 @@ public class Window extends JFrame {
         setLocationRelativeTo(null);
 
         setVisible(true);
-        ap = new AudioPlayer(TETRIS_MENU_SOUND.getPath(), true, TETRIS_MENU_SOUND.getVolume());
-        ap.play();
+        AudioPlayer.play(AudioPlayer.MENU);
     }
 
     private void addMainMenu() {
@@ -44,7 +41,7 @@ public class Window extends JFrame {
             switch (e.getId()) {
                 case 0 -> {
                     remove(mainMenu);
-                    ap.close();
+                    AudioPlayer.play(AudioPlayer.GAME);
                     addNewGame();
                 }
                 case 1 -> {
