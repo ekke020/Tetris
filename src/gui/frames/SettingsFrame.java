@@ -5,6 +5,7 @@ import gui.ComponentResizeListener;
 import gui.menu.MenuButton;
 import gui.menu.MenuListener;
 import gui.menu.settings.BindingPanel;
+import gui.menu.settings.SoundSliderPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,14 +17,22 @@ public class SettingsFrame extends JPanel {
     private MenuListener menuListener;
     private MenuButton backButton;
     private BindingPanel bindingPanel;
+    private SoundSliderPanel soundSliderPanel;
     private GridBagConstraints gc;
 
     public SettingsFrame(int width, int height) {
         setBackground(Colors.BACKGROUND_COLOR);
 
         setLayout(new GridBagLayout());
+        gc = new GridBagConstraints();
+
+        gc.gridx = 0;
+        gc.gridy = 0;
+        gc.weightx = 1;
+        gc.weighty = 0.1;
 
         addBindingPanel(width / 3, height / 3);
+        addSoundSliderPanel(width / 2, height / 6);
         addBackButton(width / 3, height / 16);
         addComponentListener(new ComponentResizeListener() {
             @Override
@@ -35,36 +44,27 @@ public class SettingsFrame extends JPanel {
 
     private void addBindingPanel(int width, int height) {
         bindingPanel = new BindingPanel(width, height);
-        gc = new GridBagConstraints();
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-
-        gc.anchor = GridBagConstraints.CENTER;
-        gc.fill = GridBagConstraints.NONE;
-
-        gc.weightx = 1;
-        gc.weighty = 0.1;
         add(bindingPanel, gc);
+    }
+
+    private void addSoundSliderPanel(int width, int height) {
+        soundSliderPanel = new SoundSliderPanel(width, height);
+        gc.gridy = 1;
+        add(soundSliderPanel, gc);
     }
 
     private void addBackButton(int buttonWidth, int buttonHeight) {
         backButton = new MenuButton("Back",buttonWidth, buttonHeight);
         backButton.addActionListener(e -> menuListener.formEventOccurred(null));
-        gc = new GridBagConstraints();
 
-        gc.gridx = 0;
-        gc.gridy = 1;
-
+        gc.gridy = 2;
         gc.anchor = GridBagConstraints.LAST_LINE_START;
-        gc.fill = GridBagConstraints.NONE;
-
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.weightx = 1;
-        gc.weighty = 0.1;
 
         add(backButton, gc);
     }
+
     public void setMenuListener(MenuListener menuListener) {
         this.menuListener = menuListener;
     }
