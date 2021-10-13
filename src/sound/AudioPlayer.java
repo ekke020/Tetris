@@ -3,6 +3,7 @@ package sound;
 import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static sound.SoundPaths.*;
@@ -11,6 +12,8 @@ public class AudioPlayer {
 
     private static final HashMap<Integer, byte[]> soundMap = new HashMap<>();
     private static Clip backgroundMusic;
+    private static float BACKGROUND_VOLUME;
+    private static float MISC_VOLUME;
 
     public static final int GAME = 0;
     public static final int MENU = 1;
@@ -44,17 +47,21 @@ public class AudioPlayer {
     public static void play(int sound) {
         Clip clip = getClipFromByteArray(soundMap.get(sound));
         if (clip == null) {
-            System.out.println("Returned");
             return;
         }
         if (sound == 0 || sound == 1) {
             switchBackgroundMusic(clip);
-            setVolume(clip, 0.2f);
+            setVolume(clip, getVolume(sound));
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } else {
-            setVolume(clip, 0.8f);
+            setVolume(clip, getVolume(sound));
         }
         clip.start();
+    }
+
+    private static float getVolume(int sound) {
+
+        return 0;
     }
 
     private static void switchBackgroundMusic(Clip sound) {
@@ -83,6 +90,7 @@ public class AudioPlayer {
                 out.write(buff, 0, read);
             }
             out.flush();
+            System.out.println(Arrays.toString(out.toByteArray()));
             return out.toByteArray();
 
         } catch (IOException e) {
@@ -101,6 +109,14 @@ public class AudioPlayer {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void updateVolumes(float volume, int slider) {
+        if (slider == 0) {
+            setVolume(backgroundMusic, volume / 100);
+        } else if (slider == 1) {
+
+        }
     }
     //TODO: Fix the volume of each Clip
     private static void setVolume(Clip clip, float volume) {
