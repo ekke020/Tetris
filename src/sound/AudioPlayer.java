@@ -12,8 +12,8 @@ public class AudioPlayer {
 
     private static final HashMap<Integer, byte[]> soundMap = new HashMap<>();
     private static Clip backgroundMusic;
-    private static float BACKGROUND_VOLUME;
-    private static float MISC_VOLUME;
+    private static float BACKGROUND_VOLUME = 0.2f;;
+    private static float MISC_VOLUME = 0.8f;
 
     public static final int GAME = 0;
     public static final int MENU = 1;
@@ -44,6 +44,14 @@ public class AudioPlayer {
         soundMap.put(10, loadClipByteArray(LEVEL_UP_SOUND.getPath()));
     }
 
+    public static float getBackgroundVolume() {
+        return BACKGROUND_VOLUME;
+    }
+
+    public static float getMiscVolume() {
+        return MISC_VOLUME;
+    }
+
     public static void play(int sound) {
         Clip clip = getClipFromByteArray(soundMap.get(sound));
         if (clip == null) {
@@ -51,17 +59,12 @@ public class AudioPlayer {
         }
         if (sound == 0 || sound == 1) {
             switchBackgroundMusic(clip);
-            setVolume(clip, getVolume(sound));
+            setVolume(clip, BACKGROUND_VOLUME);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } else {
-            setVolume(clip, getVolume(sound));
+            setVolume(clip, MISC_VOLUME);
         }
         clip.start();
-    }
-
-    private static float getVolume(int sound) {
-
-        return 0;
     }
 
     private static void switchBackgroundMusic(Clip sound) {
@@ -90,7 +93,6 @@ public class AudioPlayer {
                 out.write(buff, 0, read);
             }
             out.flush();
-            System.out.println(Arrays.toString(out.toByteArray()));
             return out.toByteArray();
 
         } catch (IOException e) {
@@ -113,12 +115,13 @@ public class AudioPlayer {
 
     public static void updateVolumes(float volume, int slider) {
         if (slider == 0) {
-            setVolume(backgroundMusic, volume / 100);
+            MISC_VOLUME = volume / 100;
         } else if (slider == 1) {
-
+            setVolume(backgroundMusic, volume / 100);
+            BACKGROUND_VOLUME = volume / 100;
         }
     }
-    //TODO: Fix the volume of each Clip
+
     private static void setVolume(Clip clip, float volume) {
         if (volume < 0f || volume > 1f)
             throw new IllegalArgumentException("Volume not valid: " + volume);
