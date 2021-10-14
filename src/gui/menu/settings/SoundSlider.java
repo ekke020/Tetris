@@ -11,7 +11,7 @@ import static colors.Colors.*;
 
 public class SoundSlider extends JSlider {
 
-    public SoundSlider(int width, String title) {
+    public SoundSlider(int width, String title, float value) {
         super(JSlider.HORIZONTAL);
         setPreferredSize(new Dimension(width, 35));
         setBackground(BACKGROUND_COLOR);
@@ -19,7 +19,8 @@ public class SoundSlider extends JSlider {
         Border emptyBorder = BorderFactory.createEmptyBorder();
         setBorder(BorderFactory.createTitledBorder(emptyBorder, title,
                 TitledBorder.LEFT, TitledBorder.ABOVE_TOP, titleFont, Colors.FOREGROUND_COLOR));
-
+        int volume = (int) (value * 100);
+        setValue(volume);
     }
 
 }
