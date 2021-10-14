@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class SoundSliderPanel extends JPanel {
 
-    private final SoundSlider[] soundSliderList = new SoundSlider[3];
+    private final SoundSlider[] soundSliderList = new SoundSlider[2];
 
     public SoundSliderPanel(int width, int height) {
         setLayout(new GridBagLayout());
@@ -20,16 +20,17 @@ public class SoundSliderPanel extends JPanel {
         setBorder(BorderFactory.createTitledBorder(
                 this.getBorder(),"Sound options", TitledBorder.LEFT,
                 TitledBorder.ABOVE_TOP, titleFont, Colors.FOREGROUND_COLOR));
-        addSlider(width - 10, "Sound effects", 0);
-        addSlider(width - 10, "Background music", 1);
+        addSlider(width - 10, "Sound effects", 0, AudioPlayer.getMiscVolume());
+        addSlider(width - 10, "Background music", 1, AudioPlayer.getBackgroundVolume());
     }
 
-    private void addSlider(int width, String title, int gridy) {
-        SoundSlider slider = new SoundSlider(width, title);
+    private void addSlider(int width, String title, int gridy, float value) {
+        SoundSlider slider = new SoundSlider(width, title, value);
         GridBagConstraints gc = new GridBagConstraints();
 
         gc.gridx = 0;
         gc.gridy = gridy;
+
         slider.addChangeListener(e -> {
             int soundLevel = slider.getValue();
             AudioPlayer.updateVolumes(soundLevel, gridy);
