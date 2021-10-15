@@ -3,7 +3,6 @@ package sound;
 import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static sound.SoundPaths.*;
@@ -12,7 +11,7 @@ public class AudioPlayer {
 
     private static final HashMap<Integer, byte[]> soundMap = new HashMap<>();
     private static Clip backgroundMusic;
-    private static float BACKGROUND_VOLUME = 0.2f;;
+    private static float BACKGROUND_VOLUME = 0.2f;
     private static float MISC_VOLUME = 0.8f;
 
     public static final int GAME = 0;
