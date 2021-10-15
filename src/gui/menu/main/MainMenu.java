@@ -5,21 +5,24 @@ import gui.ComponentResizeListener;
 import gui.menu.MenuButton;
 import gui.menu.MenuClicks;
 import gui.menu.MenuListener;
-import sound.AudioPlayer;
-import sound.SoundPaths;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import static sound.SoundPaths.TETRIS_MENU_SOUND;
 
 public class MainMenu extends JPanel {
 
     private MenuListener menuListener;
-    private GridBagConstraints gc;
-
+    private final GridBagConstraints gc;
+    private BufferedImage image;
     private final MenuButton[] buttonList = new MenuButton[3];
     private final int buttonWidth;
     private final int buttonHeight;
@@ -30,7 +33,15 @@ public class MainMenu extends JPanel {
         buttonWidth = width / 3;
         buttonHeight = height / 16;
         setLayout(new GridBagLayout());
+        gc = new GridBagConstraints();
+        gc.gridx = 0;
+        gc.gridy = 0;
+
+        gc.weightx = 1;
+        gc.weighty = 0.1;
+
         addLogo();
+//        addBackgroundImage();
         addNewGameButton();
         addOptionsButton();
         addHighScoreButton();
@@ -40,23 +51,25 @@ public class MainMenu extends JPanel {
                 setComponentSizes();
             }
         });
-
+        try {
+            image = ImageIO.read(new File(String.valueOf("assets/MainMenuImage.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addLogo() {
-        TetrisLogo tetrisLogo = new TetrisLogo();
-        gc = new GridBagConstraints();
-
-        gc.gridx = 0;
-        gc.gridy = 0;
-
-        gc.anchor = GridBagConstraints.CENTER;
-        gc.fill = GridBagConstraints.NONE;
-
-        gc.weightx = 1;
-        gc.weighty = 0.1;
-
+        Path path = Paths.get("assets/Tetris_Logo.png");
+        ImageLabel tetrisLogo = new ImageLabel(path, 759, 221);
         add(tetrisLogo, gc);
+    }
+
+    private void addBackgroundImage() {
+        Path path = Paths.get("assets/MainMenuImage.png");
+        ImageLabel backgroundImage = new ImageLabel(path, 707, 213);
+
+        gc.gridy = 1;
+        add(backgroundImage, gc);
     }
     private void addNewGameButton() {
         MenuButton button = new MenuButton("New Game", buttonWidth, buttonHeight);
@@ -69,15 +82,10 @@ public class MainMenu extends JPanel {
         });
         buttonList[0] = button;
 
-        gc = new GridBagConstraints();
-
-        gc.gridx = 0;
-        gc.gridy = 1;
+        gc.gridy = 2;
 
         gc.anchor = GridBagConstraints.PAGE_START;
-        gc.fill = GridBagConstraints.NONE;
 
-        gc.weightx = 1;
         gc.weighty = 0.01;
 
         add(button, gc);
@@ -94,16 +102,7 @@ public class MainMenu extends JPanel {
         });
         buttonList[1] = button;
 
-        gc = new GridBagConstraints();
-
-        gc.gridx = 0;
-        gc.gridy = 2;
-
-        gc.anchor = GridBagConstraints.PAGE_START;
-        gc.fill = GridBagConstraints.NONE;
-
-        gc.weightx = 1;
-        gc.weighty = 0.01;
+        gc.gridy = 3;
 
         add(button, gc);
     }
@@ -119,15 +118,8 @@ public class MainMenu extends JPanel {
         });
         buttonList[2] = button;
 
-        gc = new GridBagConstraints();
 
-        gc.gridx = 0;
-        gc.gridy = 3;
-
-        gc.anchor = GridBagConstraints.PAGE_START;
-        gc.fill = GridBagConstraints.NONE;
-
-        gc.weightx = 1;
+        gc.gridy = 4;
         gc.weighty = 1;
 
         add(button, gc);
@@ -142,5 +134,14 @@ public class MainMenu extends JPanel {
 
     public void setMenuListener(MenuListener menuListener) {
         this.menuListener = menuListener;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D) g;
+        int x = (getWidth() - 707) / 2;
+        g2.drawImage(image, x, getHeight() / 2, 707, 213, null);
     }
 }
