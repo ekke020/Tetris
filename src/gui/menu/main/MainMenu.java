@@ -6,14 +6,10 @@ import gui.menu.MenuButton;
 import gui.menu.MenuClicks;
 import gui.menu.MenuListener;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -22,7 +18,6 @@ public class MainMenu extends JPanel {
 
     private MenuListener menuListener;
     private final GridBagConstraints gc;
-    private BufferedImage image;
     private final MenuButton[] buttonList = new MenuButton[3];
     private final int buttonWidth;
     private final int buttonHeight;
@@ -41,7 +36,7 @@ public class MainMenu extends JPanel {
         gc.weighty = 0.1;
 
         addLogo();
-//        addBackgroundImage();
+        addBackgroundImage();
         addNewGameButton();
         addOptionsButton();
         addHighScoreButton();
@@ -51,11 +46,6 @@ public class MainMenu extends JPanel {
                 setComponentSizes();
             }
         });
-        try {
-            image = ImageIO.read(new File(String.valueOf("assets/MainMenuImage.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void addLogo() {
@@ -64,13 +54,6 @@ public class MainMenu extends JPanel {
         add(tetrisLogo, gc);
     }
 
-    private void addBackgroundImage() {
-        Path path = Paths.get("assets/MainMenuImage.png");
-        ImageLabel backgroundImage = new ImageLabel(path, 707, 213);
-
-        gc.gridy = 1;
-        add(backgroundImage, gc);
-    }
     private void addNewGameButton() {
         MenuButton button = new MenuButton("New Game", buttonWidth, buttonHeight);
         button.addActionListener(new ActionListener() {
@@ -81,13 +64,8 @@ public class MainMenu extends JPanel {
             }
         });
         buttonList[0] = button;
-
-        gc.gridy = 2;
-
-        gc.anchor = GridBagConstraints.PAGE_START;
-
+        gc.gridy = 1;
         gc.weighty = 0.01;
-
         add(button, gc);
     }
 
@@ -101,9 +79,7 @@ public class MainMenu extends JPanel {
             }
         });
         buttonList[1] = button;
-
-        gc.gridy = 3;
-
+        gc.gridy = 2;
         add(button, gc);
     }
 
@@ -117,12 +93,18 @@ public class MainMenu extends JPanel {
             }
         });
         buttonList[2] = button;
-
-
-        gc.gridy = 4;
-        gc.weighty = 1;
-
+        gc.gridy = 3;
+        gc.weighty = 0.1;
         add(button, gc);
+    }
+
+    private void addBackgroundImage() {
+        Path path = Paths.get("assets/MainMenuImage.png");
+        ImageLabel backgroundImage = new ImageLabel(path, 707, 213);
+        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.gridy = 4;
+        gc.weighty = 0.6;
+        add(backgroundImage, gc);
     }
 
     private void setComponentSizes() {
@@ -136,12 +118,4 @@ public class MainMenu extends JPanel {
         this.menuListener = menuListener;
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D) g;
-        int x = (getWidth() - 707) / 2;
-        g2.drawImage(image, x, getHeight() / 2, 707, 213, null);
-    }
 }
