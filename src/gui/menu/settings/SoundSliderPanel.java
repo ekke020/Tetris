@@ -38,4 +38,17 @@ public class SoundSliderPanel extends JPanel {
         soundSliderList[gridy] = slider;
         add(slider, gc);
     }
+
+    @Override
+    public void setPreferredSize(Dimension preferredSize) {
+        super.setPreferredSize(preferredSize);
+        int width = (int) preferredSize.getWidth() - 10;
+        if (this.getBorder() != null) {
+            int size = (int) (preferredSize.getWidth() / 15);
+            ((javax.swing.border.TitledBorder) getBorder()).setTitleFont(new Font("Serif", Font.BOLD, size));
+            for (SoundSlider soundSlider : soundSliderList) {
+                soundSlider.setPreferredSize(new Dimension(width, 35));
+            }
+        }
+    }
 }
