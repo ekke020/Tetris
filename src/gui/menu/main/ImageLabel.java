@@ -7,18 +7,18 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class TetrisLogo extends JLabel {
 
     private BufferedImage image;
-    private final String imagePath = "assets/The_Tetris_Company_logo.png";
 
 
-    public TetrisLogo() {
-        setMaximumSize(new Dimension(373, 259));
-        setPreferredSize(new Dimension(373, 259));
+    public TetrisLogo(Path path, int width, int height) {
+        setMaximumSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(width, height));
         try {
-            image = ImageIO.read(new File(imagePath));
+            image = ImageIO.read(new File(String.valueOf(path)));
         } catch (IOException e) {
             e.printStackTrace();
         }
