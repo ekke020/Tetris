@@ -18,7 +18,7 @@ public class SettingsFrame extends JPanel {
     private MenuButton backButton;
     private BindingPanel bindingPanel;
     private SoundSliderPanel soundSliderPanel;
-    private GridBagConstraints gc;
+    private final GridBagConstraints gc;
 
     public SettingsFrame(int width, int height) {
         setBackground(Colors.BACKGROUND_COLOR);
@@ -71,9 +71,9 @@ public class SettingsFrame extends JPanel {
 
     private void setComponentSizes() {
         // Update all the component sizes here.
-        System.out.println("SettingsFrame");
         backButton.setPreferredSize(new Dimension(getWidth() / 3, getHeight() / 16));
         bindingPanel.setPreferredSize(new Dimension(getWidth() / 3, getHeight() / 3));
+        soundSliderPanel.setPreferredSize(new Dimension(getWidth() / 2, getHeight() / 6));
         SwingUtilities.updateComponentTreeUI(this);
     }
 }
