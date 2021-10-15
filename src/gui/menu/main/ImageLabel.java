@@ -9,12 +9,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class TetrisLogo extends JLabel {
+public class ImageLabel extends JLabel {
 
     private BufferedImage image;
 
 
-    public TetrisLogo(Path path, int width, int height) {
+    public ImageLabel(Path path, int width, int height) {
         setMaximumSize(new Dimension(width, height));
         setPreferredSize(new Dimension(width, height));
         try {
