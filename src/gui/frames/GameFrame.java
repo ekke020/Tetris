@@ -2,10 +2,7 @@ package gui.frames;
 
 import colors.Colors;
 import gui.Block;
-import keybinds.KeyBinder;
-import keybinds.KeybindingLoader;
 import manager.*;
-import player.Player;
 import sound.AudioPlayer;
 
 import javax.swing.*;
@@ -16,23 +13,18 @@ import java.awt.*;
 
 public class GameFrame extends JPanel {
 
-    private final GameManager gameManager;
     private Block[][] tetrisBlocks;
 
+    public Block[][] getTetrisBlocks() {
+        return tetrisBlocks;
+    }
 
-    public GameFrame(Player player, int width, int height) {
+    public GameFrame(int width, int height) {
         setLayout(new GridLayout(24, 12));
         addBorder();
         setBackground(Colors.BACKGROUND_COLOR);
         setPreferredSize(new Dimension(width, height));
         createBoard();
-
-        Timer updateTimer = new Timer(10, e -> repaint());
-        updateTimer.start();
-
-        gameManager = new GameManager(tetrisBlocks, player);
-        addKeyBindings();
-
     }
 
     private void createBoard() {
@@ -55,38 +47,16 @@ public class GameFrame extends JPanel {
         setBorder(compound);
     }
 
-    private void addKeyBindings() {
-        GameMovement gameMovement = new GameMovement(gameManager, tetrisBlocks);
-
-        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_LEFT"),
-                "left", true, (evt) -> gameMovement.moveLeft());
-
-        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_RIGHT"),
-                "right", true, (evt) -> gameMovement.moveRight());
-
-        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SPIN"),
-                "spin", true, (evt) -> gameMovement.spin());
-
-        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SOFT_DROP"),
-                "softDrop", false, (evt) -> gameMovement.softDrop(true));
-
-        KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("SOFT_DROP"),
-                "softDropRelease", true, (evt) -> gameMovement.softDrop(false));
-
-        KeyBinder.addKeyBinding(this,KeybindingLoader.getKeybinding("HARD_DROP"),
-                "hardDrop", true, (evt) -> gameMovement.hardDrop());
-    }
-
     public void switchStates() {
         System.out.println("Width: " + tetrisBlocks[0][0].getWidth() + "\nHeight: " + tetrisBlocks[0][0].getHeight());
         switch (GameState.getGameState()) {
             case PAUSE -> {
-                gameManager.getTimer().stop();
+//                gameManager.getTimer().stop();
                 AudioPlayer.play(AudioPlayer.PAUSE);
                 AudioPlayer.pauseBackgroundMusic();
             }
             case PLAY -> {
-                gameManager.getTimer().start();
+//                gameManager.getTimer().start();
                 AudioPlayer.resumeBackgroundMusic();
             }
         }
