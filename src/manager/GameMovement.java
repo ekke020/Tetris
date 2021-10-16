@@ -82,9 +82,9 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
     public void softDrop(boolean on) {
         int delay = gameManager.getDelay();
         if (on) {
-            gameManager.getTimer().setDelay(delay / 2);
+//            gameManager.getTimer().setDelay(delay / 2);
         } else {
-            gameManager.getTimer().setDelay(delay);
+//            gameManager.getTimer().setDelay(delay);
         }
     }
 
