@@ -11,7 +11,7 @@ public class AudioPlayer {
 
     private static final HashMap<Integer, byte[]> soundMap = new HashMap<>();
     private static Clip backgroundMusic;
-    private static float BACKGROUND_VOLUME = 0.2f;
+    private static float BACKGROUND_VOLUME = 0f;
     private static float MISC_VOLUME = 0.8f;
 
     public static final int GAME = 0;
