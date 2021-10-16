@@ -5,11 +5,8 @@ import player.Player;
 import sound.AudioPlayer;
 import tetromino.*;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class GameManager implements ActionListener {
+public class GameManager {
 
     private Tetromino currentTetromino;
     private final Player player;
@@ -17,7 +14,6 @@ public class GameManager implements ActionListener {
     private boolean circumvention = true;
 
     private int delay;
-    private final Timer timer;
 
     public Tetromino getCurrentTetromino() {
         return currentTetromino;
@@ -27,29 +23,24 @@ public class GameManager implements ActionListener {
         return delay;
     }
 
-    public Timer getTimer() {
-        return timer;
-    }
-
     public GameManager(Block[][] tetrisBlocks, Player player) {
         this.tetrisBlocks = tetrisBlocks;
         this.player = player;
+
         delay = GameStats.getGameSpeed(player.getLevel());
-        timer = new Timer(delay, this);
+
         currentTetromino = player.loadNewTetromino();
         player.updateFields();
-        timer.start();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void update() {
         collision();
         if (circumvention) {
             gravity();
         } else {
-            currentTetromino = player.loadNewTetromino();
             scanRows();
             circumvention = true;
+            currentTetromino = player.loadNewTetromino();
         }
     }
 
@@ -147,7 +138,7 @@ public class GameManager implements ActionListener {
 
     private void updateDelay() {
         delay = GameStats.getGameSpeed(player.getLevel());
-        timer.setDelay(delay);
+//        timer.setDelay(delay);
     }
 
     public void updateCurrentTetromino() {
