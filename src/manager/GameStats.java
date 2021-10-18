@@ -2,7 +2,20 @@ package manager;
 
 public class GameStats {
 
+    private static int gameSpeed;
+    private static int softDrop = 1;
 
+    public static int getGameSpeed() {
+        return gameSpeed / softDrop;
+    }
+
+    public static void toggleSoftDrop(boolean on) {
+        if (on) {
+            softDrop = 3;
+        } else {
+            softDrop = 1;
+        }
+    }
     public static int calculateLineScore(int level, int lines) {
         return switch (lines) {
             case 1 -> 40 * (level + 1);
@@ -18,19 +31,19 @@ public class GameStats {
         return lines >= linesRequired;
     }
 
-    public static int getGameSpeed(int level) {
-        return switch (level) {
-            case 0 -> 1000;
-            case 1 -> 900;
-            case 2 -> 800;
-            case 3 -> 700;
-            case 4 -> 600;
-            case 5 -> 500;
-            case 6 -> 400;
-            case 7 -> 300;
-            case 8 -> 200;
-            case 9 -> 100;
-            default -> 0;
+    public static void setGameSpeed(int level) {
+        switch (level) {
+            case 0 -> gameSpeed = 60;
+            case 1 -> gameSpeed = 53;
+            case 2 -> gameSpeed = 49;
+            case 3 -> gameSpeed = 45;
+            case 4 -> gameSpeed = 41;
+            case 5 -> gameSpeed = 37;
+            case 6 -> gameSpeed = 33;
+            case 7 -> gameSpeed = 28;
+            case 8 -> gameSpeed = 22;
+            case 9 -> gameSpeed = 17;
+            default -> gameSpeed = 12;
         };
     }
 }
