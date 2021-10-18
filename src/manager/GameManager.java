@@ -5,46 +5,38 @@ import player.Player;
 import sound.AudioPlayer;
 import tetromino.*;
 
+import java.util.*;
+
 
 public class GameManager {
 
     private Tetromino currentTetromino;
     private final Player player;
     private final Block[][] tetrisBlocks;
-    private boolean circumvention = true;
+    private boolean update = false;
 
-    private int delay;
+    public boolean isUpdate() {
+        return update;
+    }
+
+    public void setUpdate(boolean update) {
+        this.update = update;
+    }
 
     public Tetromino getCurrentTetromino() {
         return currentTetromino;
     }
 
-    public int getDelay() {
-        return delay;
-    }
-
     public GameManager(Block[][] tetrisBlocks, Player player) {
         this.tetrisBlocks = tetrisBlocks;
         this.player = player;
+    }
 
-        delay = GameStats.getGameSpeed(player.getLevel());
-
+    public void updateCurrentTetromino() {
         currentTetromino = player.loadNewTetromino();
-        player.updateFields();
     }
 
-    public void update() {
-        collision();
-        if (circumvention) {
-            gravity();
-        } else {
-            scanRows();
-            circumvention = true;
-            currentTetromino = player.loadNewTetromino();
-        }
-    }
-
-    private void collision() {
+    public boolean collision() {
         int[][] currentTetrominoCoordinates = currentTetromino.getCoordinates();
         boolean stop = false;
         for (int[] coordinates : currentTetrominoCoordinates) {
@@ -57,11 +49,12 @@ public class GameManager {
                 }
             }
             if (rowCoordinate == 23 || stop) {
-                circumvention = false;
                 AudioPlayer.play(AudioPlayer.TETROMINO_LANDING);
-                break;
+                return true;
             }
         }
+        gravity();
+        return false;
     }
 
     private void gravity() {
@@ -86,10 +79,10 @@ public class GameManager {
         }
     }
 
-    private void scanRows() {
+    public List<Block> scanRows() {
         boolean delete;
         int lines = 0;
-        int row = 0;
+        List<Block> removedBlocks = new ArrayList<>();
         for (Block[] blocks : tetrisBlocks) {
             delete = true;
             for (Block block : blocks) {
@@ -100,8 +93,7 @@ public class GameManager {
                 }
             }
             if (delete) {
-                row = blocks[0].getBlockRow();
-                removeRow(blocks);
+                removedBlocks.addAll(List.of(blocks));
                 lines++;
             }
             if (lines > 0 && !delete) {
@@ -109,14 +101,20 @@ public class GameManager {
             }
         }
         if (lines > 0) {
-            moveEverythingDown(row, lines);
+            return removedBlocks;
         }
-        updateElements(lines);
+        return null;
     }
 
-    private void removeRow(Block[] block) {
-        for (Block value : block) {
-            value.setTetromino(null);
+    public void animateRows(List<Block> blocks, boolean hide) {
+        for (Block block : blocks) {
+            block.setHide(hide);
+        }
+    }
+
+    private void removeRows(List<Block> blocks) {
+        for (Block block : blocks) {
+            block.setTetromino(null);
         }
     }
 
@@ -128,21 +126,9 @@ public class GameManager {
                 tetrisBlocks[row + lines][collum].setTetromino(tetromino);
             }
         }
-        AudioPlayer.play(AudioPlayer.LINE_CLEARED);
     }
     private void updateElements(int lines) {
         player.increaseScore(lines);
-        player.updateFields();
-        updateDelay();
     }
 
-    private void updateDelay() {
-        delay = GameStats.getGameSpeed(player.getLevel());
-//        timer.setDelay(delay);
-    }
-
-    public void updateCurrentTetromino() {
-        currentTetromino = player.loadNewTetromino();
-        scanRows();
-    }
 }
