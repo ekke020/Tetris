@@ -80,15 +80,12 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
     }
 
     public void softDrop(boolean on) {
-        int delay = gameManager.getDelay();
-        if (on) {
-//            gameManager.getTimer().setDelay(delay / 2);
-        } else {
-//            gameManager.getTimer().setDelay(delay);
-        }
+        //TODO: Fix this method.
+        GameStats.toggleSoftDrop(on);
     }
 
     public void hardDrop() {
+        //TODO: Increase score based on the rows dropped.
         gameManager.setCurrentTetrominoInBlock(false);
         int row = getNewRowNumber();
         for (int[] coordinates : getCurrentTetrominoCoordinates()) {
@@ -96,8 +93,7 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
         }
         getCurrentTetromino().setCoordinates(getCurrentTetrominoCoordinates());
         gameManager.setCurrentTetrominoInBlock(true);
-        gameManager.updateCurrentTetromino();
-        AudioPlayer.play(AudioPlayer.TETROMINO_LANDING);
+        gameManager.setUpdate(true);
     }
 
     private int getNewRowNumber() {
