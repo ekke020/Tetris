@@ -10,6 +10,7 @@ public class Block extends JPanel {
     private Tetromino tetromino;
     private final int blockRow;
     private final int blockColumn;
+    private boolean hide = false;
 
     public int getBlockRow() {
         return blockRow;
@@ -21,6 +22,14 @@ public class Block extends JPanel {
 
     public Tetromino getTetromino() {
         return tetromino;
+    }
+
+    public void setHide(boolean hide) {
+        this.hide = hide;
+    }
+
+    public boolean isHide() {
+        return hide;
     }
 
     public Block(int blockRow, int blockColumn) {
@@ -44,7 +53,7 @@ public class Block extends JPanel {
         int heightIncrement = getHeight() / 10;
         int width = getWidth() - widthIncrement;
         int height = getHeight() - heightIncrement;
-        if (tetromino != null) {
+        if (tetromino != null && !hide) {
             g2.setColor(tetromino.getColor());
             g2.draw3DRect(widthIncrement, heightIncrement, width, height, true);
             g2.fill3DRect(widthIncrement, heightIncrement, width, height, true);
