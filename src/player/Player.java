@@ -30,15 +30,6 @@ public class Player {
         return currentTetromino;
     }
 
-    private void updateFields() {
-        FieldUpdater update = new FieldUpdater(getShowcase(), level, score, lines);
-        playerListener.formEventOccurred(update);
-    }
-
-    private Tetromino getShowcase() {
-        return activeTetrominos.get(0);
-    }
-
     private void reloadTetrominos() {
         activeTetrominos = Tetromino.reloadTetrominos();
         Collections.shuffle(activeTetrominos);
@@ -48,6 +39,7 @@ public class Player {
         score += GameStats.calculateLineScore(level, lines);
         this.lines += lines;
         checkIfLevelUp();
+        updateFields();
     }
 
     private void checkIfLevelUp() {
@@ -57,6 +49,15 @@ public class Player {
             GameStats.setGameSpeed(level);
             AudioPlayer.play(AudioPlayer.LEVEL_UP);
         }
+    }
+
+    private void updateFields() {
+        FieldUpdater update = new FieldUpdater(getShowcase(), level, score, lines);
+        playerListener.formEventOccurred(update);
+    }
+
+    private Tetromino getShowcase() {
+        return activeTetrominos.get(0);
     }
 
     public void setPlayerListener(PlayerListener listener) {
