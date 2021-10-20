@@ -43,7 +43,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
         int frames = 0; // Frames that has passed.
         int fps = 0; // Frames per seconds.
         while(running) {
-
+            // TODO: Refactor this pile! (It works!) (fps is a borrowed int)
             render = false;
             // We divide our nanoseconds by one billion to make them into milliseconds. We take nanoTime to make it as accurate as possible
             firstTime = System.nanoTime() / 1000000000.0;
