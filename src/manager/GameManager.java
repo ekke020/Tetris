@@ -82,7 +82,7 @@ public class GameManager {
     public List<Block> scanRows() {
         boolean delete;
         int lines = 0;
-        List<Block> removedBlocks = new ArrayList<>();
+        List<Block> fullRows = new ArrayList<>();
         for (Block[] blocks : tetrisBlocks) {
             delete = true;
             for (Block block : blocks) {
@@ -93,7 +93,7 @@ public class GameManager {
                 }
             }
             if (delete) {
-                removedBlocks.addAll(List.of(blocks));
+                fullRows.addAll(List.of(blocks));
                 lines++;
             }
             if (lines > 0 && !delete) {
@@ -101,7 +101,7 @@ public class GameManager {
             }
         }
         if (lines > 0) {
-            return removedBlocks;
+            return fullRows;
         }
         return null;
     }
@@ -112,6 +112,11 @@ public class GameManager {
         }
     }
 
+    public void updateBoard(List<Block> blocks) {
+        removeRows(blocks);
+        moveEverythingDown(blocks.get(blocks.size() - 1).getBlockRow(), blocks.size() / 12 );
+        updateElements(blocks.size() / 12);
+    }
     private void removeRows(List<Block> blocks) {
         for (Block block : blocks) {
             block.setTetromino(null);
