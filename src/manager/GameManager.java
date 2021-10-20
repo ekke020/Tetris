@@ -13,23 +13,17 @@ public class GameManager {
     private Tetromino currentTetromino;
     private final Player player;
     private final Block[][] tetrisBlocks;
-    private boolean update = false;
-
-    public boolean isUpdate() {
-        return update;
-    }
-
-    public void setUpdate(boolean update) {
-        this.update = update;
-    }
 
     public Tetromino getCurrentTetromino() {
         return currentTetromino;
     }
-
+    public void setCurrentTetrominoNull() {
+        currentTetromino = null;
+    }
     public GameManager(Block[][] tetrisBlocks, Player player) {
         this.tetrisBlocks = tetrisBlocks;
         this.player = player;
+        updateCurrentTetromino();
     }
 
     public void updateCurrentTetromino() {
@@ -78,11 +72,20 @@ public class GameManager {
             }
         }
     }
+    private final List<Block> fullRows = new ArrayList<>();
+    public boolean checkRows() {
+        return scanRows() != null;
+    }
 
-    public List<Block> scanRows() {
+    public void animateRows(boolean hide) {
+        for (Block block : fullRows) {
+            block.setHide(hide);
+        }
+    }
+
+    private List<Block> scanRows() {
         boolean delete;
         int lines = 0;
-        List<Block> fullRows = new ArrayList<>();
         for (Block[] blocks : tetrisBlocks) {
             delete = true;
             for (Block block : blocks) {
@@ -101,29 +104,20 @@ public class GameManager {
             }
         }
         if (lines > 0) {
+            if (lines == 4) {
+                AudioPlayer.play(AudioPlayer.TETRIS);
+            } else {
+                AudioPlayer.play(AudioPlayer.LINE_CLEARED);
+            }
             return fullRows;
         }
         return null;
     }
 
-    public void animateRows(List<Block> blocks, boolean hide) {
-        for (Block block : blocks) {
-            block.setHide(hide);
-        }
-    }
-
-    public void updateBoard(List<Block> blocks) {
-        removeRows(blocks);
-        moveEverythingDown(blocks.get(blocks.size() - 1).getBlockRow(), blocks.size() / 12 );
-        updateElements(blocks.size() / 12);
-    }
-    private void removeRows(List<Block> blocks) {
-        for (Block block : blocks) {
-            block.setTetromino(null);
-        }
-    }
-
-    private void moveEverythingDown(int rows, int lines) {
+    public void moveEverythingDown() {
+        removeRows(fullRows);
+        int rows = fullRows.get(fullRows.size() - 1).getBlockRow();
+        int lines = fullRows.size() / 12;
         for (int row = rows - lines; row > 0; row--) {
             for (int collum = 0; collum < 12; collum++) {
                 Tetromino tetromino = tetrisBlocks[row][collum].getTetromino();
@@ -131,9 +125,16 @@ public class GameManager {
                 tetrisBlocks[row + lines][collum].setTetromino(tetromino);
             }
         }
+        fullRows.clear();
+        updateElements(lines);
+    }
+
+    private void removeRows(List<Block> blocks) {
+        for (Block block : blocks) {
+            block.setTetromino(null);
+        }
     }
     private void updateElements(int lines) {
         player.increaseScore(lines);
     }
-
 }
