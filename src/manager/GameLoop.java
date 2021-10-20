@@ -5,7 +5,6 @@ import gui.frames.GameFrame;
 import sound.AudioPlayer;
 
 import javax.swing.*;
-import java.util.List;
 
 public class GameLoop extends SwingWorker<Boolean, Integer> {
 
@@ -16,18 +15,24 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
     private long totalFramesCount = 0;
     private long targetFrameCount = GameStats.getGameSpeed();
     private long targetAnimateFrame = -1;
+    private boolean gameUpdate = true;
+    private boolean removeRows = false;
 
     public GameLoop(GameFrame gameFrame, GameManager gameManager) {
         this.gameFrame = gameFrame;
         this.gameManager = gameManager;
     }
 
+    public void requestUpdate() {
+        if (!removeRows)
+            gameUpdate = true;
+    }
+
     @Override
     protected Boolean doInBackground() {
         running = true;
         boolean render = false;
-        boolean animate = false;
-        List<Block> blocks = null;
+        boolean hide = true;
 
         double firstTime = 0;
         double lastTime = System.nanoTime() / 1000000000.0;
@@ -37,8 +42,6 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
         double frameTime = 0;
         int frames = 0; // Frames that has passed.
         int fps = 0; // Frames per seconds.
-        int animations = 0;
-        gameManager.updateCurrentTetromino();
         while(running) {
 
             render = false;
@@ -52,37 +55,38 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
             while(unprocessedTime >= UPDATE_CAP) {
                 unprocessedTime -= UPDATE_CAP;
                 render = true;
-                if (animate) {
-                    gameManager.animateRows(blocks, !blocks.get(0).isHide());
-                    targetAnimateFrame = totalFramesCount + 5;
-                    animate = false;
-                    animations++;
-                    if (animations > 3) {
-                        gameManager.updateBoard(blocks);
-                        blocks = null;
-                        AudioPlayer.play(AudioPlayer.LINE_CLEARED);
-                        targetAnimateFrame = -1;
-                        targetFrameCount = totalFramesCount + 1;
-                    }
-                }
-                if (gameManager.isUpdate()) {
+
+                if (gameUpdate) {
                     if (gameManager.collision()) {
-                        blocks = gameManager.scanRows();
-                        gameManager.updateCurrentTetromino();
-                        if (blocks != null) {
-                            targetAnimateFrame = totalFramesCount + 1;
-                        } else {
-                            targetFrameCount = totalFramesCount + GameStats.getGameSpeed();
-                        }
+                        gameManager.setCurrentTetrominoNull();
+                       if(gameManager.checkRows()) {
+                           removeRows = true;
+                           fps = 0;
+                           targetFrameCount = -1;
+                       } else {
+                           gameManager.updateCurrentTetromino();
+                           targetFrameCount = totalFramesCount + 1;
+                       }
                     } else {
                         targetFrameCount = totalFramesCount + GameStats.getGameSpeed();
                     }
-                    gameManager.setUpdate(false);
+                    gameUpdate = false;
                 }
-
+                if (removeRows) {
+                    gameManager.animateRows(hide);
+                    hide = !hide;
+                    if (fps == 5) {
+                        gameManager.updateCurrentTetromino();
+                        gameUpdate = true;
+                        gameManager.moveEverythingDown();
+                    } else {
+                        targetAnimateFrame = totalFramesCount + 20;
+                    }
+                    removeRows = false;
+                }
                 if (frameTime >= 1.0) {
                     frameTime = 0;
-                    fps = frames;
+//                    fps = frames;
                     frames = 0;
 
 //                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss");
@@ -97,10 +101,11 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                 frames++;
                 totalFramesCount++;
                 if (totalFramesCount == targetFrameCount) {
-                    gameManager.setUpdate(true);
-                }
-                if (totalFramesCount == targetAnimateFrame) {
-                    animate = true;
+                    System.out.println("setting gameUpdate to true!");
+                    gameUpdate = true;
+                } else if (totalFramesCount == targetAnimateFrame) {
+                    fps++;
+                    removeRows = true;
                 }
             }
         }
