@@ -5,9 +5,21 @@ import sound.AudioPlayer;
 import tetromino.Tetromino;
 
 
-public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
+public class GameMovement {
+
+    private final GameManager gameManager;
+    private final Block[][] tetrisBlocks;
+    private GameMovementListener gameMovementListener;
+
+    public GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
+        this.gameManager = gameManager;
+        this.tetrisBlocks = tetrisBlocks;
+    }
 
     public void moveLeft() {
+        if (getCurrentTetromino() == null) {
+            return;
+        }
         if (isMoveLegal(-1)) {
             move(-1);
             AudioPlayer.play(AudioPlayer.MOVE);
@@ -17,6 +29,9 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
     }
 
     public void moveRight() {
+        if (getCurrentTetromino() == null) {
+            return;
+        }
         if (isMoveLegal(1)) {
             move(1);
             AudioPlayer.play(AudioPlayer.MOVE);
@@ -50,6 +65,9 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
     }
 
     public void spin() {
+        if (getCurrentTetromino() == null) {
+            return;
+        }
         int[][] updatedCoordinates = getCurrentTetromino().getSpinCoordinates();
 
         if (isSpinLegal(updatedCoordinates)) {
@@ -80,12 +98,17 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
     }
 
     public void softDrop(boolean on) {
-        //TODO: Fix this method.
+        if (getCurrentTetromino() == null) {
+            return;
+        }
         GameStats.toggleSoftDrop(on);
     }
 
     public void hardDrop() {
         //TODO: Increase score based on the rows dropped.
+        if (getCurrentTetromino() == null) {
+            return;
+        }
         gameManager.setCurrentTetrominoInBlock(false);
         int row = getNewRowNumber();
         for (int[] coordinates : getCurrentTetrominoCoordinates()) {
@@ -93,7 +116,7 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
         }
         getCurrentTetromino().setCoordinates(getCurrentTetrominoCoordinates());
         gameManager.setCurrentTetrominoInBlock(true);
-        gameManager.setUpdate(true);
+        gameMovementListener.moveEventOccurred();
     }
 
     private int getNewRowNumber() {
@@ -125,5 +148,9 @@ public record GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
 
     private int[][] getCurrentTetrominoCoordinates() {
         return getCurrentTetromino().getCoordinates();
+    }
+
+    public void setGameMovementListener(GameMovementListener listener) {
+        this.gameMovementListener = listener;
     }
 }
