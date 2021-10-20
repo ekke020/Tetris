@@ -4,10 +4,7 @@ import gui.frames.GameFrame;
 import gui.menu.game.GameMenu;
 import keybinds.KeyBinder;
 import keybinds.KeybindingLoader;
-import manager.GameLoop;
-import manager.GameManager;
-import manager.GameMovement;
-import manager.GameState;
+import manager.*;
 import player.Player;
 
 import javax.swing.*;
@@ -21,6 +18,7 @@ public class NewGame extends JPanel {
     private GameFrame gameFrame;
     private Player player;
     private GameManager gameManager;
+    private GameLoop gameLoop;
 
     public NewGame(int width, int height) {
         setLayout(new GridBagLayout());
@@ -60,9 +58,11 @@ public class NewGame extends JPanel {
 
     private void addNewPlayer() {
         player = new Player();
-        player.setPlayerListener(e ->
-                gameMenu.updateMenu(e.getTetromino(), e.getLevel(), e.getScore(), e.getLines())
-        );
+        player.setPlayerListener(e -> {
+            gameMenu.updateMenu(e.getTetromino(), e.getLevel(), e.getScore(), e.getLines());
+            gameMenu.repaint();
+
+        });
     }
 
     private void addNewGame(int width, int height) {
@@ -76,12 +76,14 @@ public class NewGame extends JPanel {
     }
 
     private void startGame() {
-        GameLoop gameLoop = new GameLoop(gameFrame, gameManager);
+        gameLoop = new GameLoop(gameFrame, gameManager);
         gameLoop.execute();
     }
 
     private void addKeyBindings() {
         GameMovement gameMovement = new GameMovement(gameManager, gameFrame.getTetrisBlocks());
+        gameMovement.setGameMovementListener(() -> gameLoop.requestUpdate());
+
         KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_LEFT"),
                 "left", true, (evt) -> gameMovement.moveLeft());
 
