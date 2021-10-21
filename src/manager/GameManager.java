@@ -99,7 +99,7 @@ public class GameManager {
                 fullRows.addAll(List.of(blocks));
                 lines++;
             }
-            if (lines > 0 && !delete) {
+            if (lines > 3) {
                 break;
             }
         }
@@ -115,6 +115,7 @@ public class GameManager {
     }
 
     public void moveEverythingDown() {
+        // TODO: Fix this method, currently it doesn't work if there is a incomplete row between two full rows.
         removeRows(fullRows);
         int rows = fullRows.get(fullRows.size() - 1).getBlockRow();
         int lines = fullRows.size() / 12;
