@@ -13,6 +13,7 @@ public class GameManager {
     private Tetromino currentTetromino;
     private final Player player;
     private final Block[][] tetrisBlocks;
+    private final List<Block[]> fullRows = new ArrayList<>();
 
     public Tetromino getCurrentTetromino() {
         return currentTetromino;
@@ -72,18 +73,16 @@ public class GameManager {
             }
         }
     }
-    private final List<Block> fullRows = new ArrayList<>();
-    public boolean checkRows() {
-        return scanRows() != null;
-    }
 
     public void animateRows(boolean hide) {
-        for (Block block : fullRows) {
-            block.setHide(hide);
+        for (Block[] fullRow : fullRows) {
+            for (Block block : fullRow) {
+                block.setHide(hide);
+            }
         }
     }
 
-    private List<Block> scanRows() {
+    public boolean isAnyRowFull() {
         boolean delete;
         int lines = 0;
         for (Block[] blocks : tetrisBlocks) {
@@ -96,7 +95,7 @@ public class GameManager {
                 }
             }
             if (delete) {
-                fullRows.addAll(List.of(blocks));
+                fullRows.add(blocks);
                 lines++;
             }
             if (lines > 3) {
@@ -109,33 +108,63 @@ public class GameManager {
             } else {
                 AudioPlayer.play(AudioPlayer.LINE_CLEARED);
             }
-            return fullRows;
+            return true;
         }
-        return null;
+        return false;
     }
 
     public void moveEverythingDown() {
-        // TODO: Fix this method, currently it doesn't work if there is a incomplete row between two full rows.
-        removeRows(fullRows);
-        int rows = fullRows.get(fullRows.size() - 1).getBlockRow();
-        int lines = fullRows.size() / 12;
-        for (int row = rows - lines; row > 0; row--) {
-            for (int collum = 0; collum < 12; collum++) {
-                Tetromino tetromino = tetrisBlocks[row][collum].getTetromino();
-                tetrisBlocks[row][collum].setTetromino(null);
-                tetrisBlocks[row + lines][collum].setTetromino(tetromino);
+        HashMap<Integer, List<Block[]>> listMap = splitRows();
+        for(Map.Entry<Integer, List<Block[]>> entry : listMap.entrySet()) {
+            if (entry.getValue().isEmpty()) {
+                updateElements(fullRows.size());
+                fullRows.clear();
+                return;
+            }
+            removeRows(entry.getValue());
+            int bottomMostRow = entry.getValue().get(entry.getValue().size() - 1)[0].getBlockRow();
+            int lines = entry.getValue().size();
+            for (int row = bottomMostRow - lines; row > 0; row--) {
+                for (int collum = 0; collum < 12; collum++) {
+                    Tetromino tetromino = tetrisBlocks[row][collum].getTetromino();
+                    tetrisBlocks[row][collum].setTetromino(null);
+                    tetrisBlocks[row + lines][collum].setTetromino(tetromino);
+                }
             }
         }
+        updateElements(fullRows.size());
         fullRows.clear();
-        updateElements(lines);
     }
 
-    private void removeRows(List<Block> blocks) {
-        for (Block block : blocks) {
-            block.setTetromino(null);
+    private HashMap<Integer, List<Block[]>> splitRows() {
+        HashMap<Integer, List<Block[]>> listMap = new HashMap<>();
+        List<Block[]> rowStackOne = new ArrayList<>();
+        List<Block[]> rowStackTwo = new ArrayList<>();
+        listMap.put(0, rowStackOne);
+        listMap.put(1, rowStackTwo);
+
+        for (Block[] fullRow : fullRows) {
+            if (rowStackOne.isEmpty()) {
+                rowStackOne.add(fullRow);
+            } else if (fullRow[0].getBlockRow() - rowStackOne.get(rowStackOne.size() - 1)[0].getBlockRow() == 1) {
+                rowStackOne.add(fullRow);
+            } else {
+                rowStackTwo.add(fullRow);
+            }
         }
+        return listMap;
     }
+
     private void updateElements(int lines) {
         player.increaseScore(lines);
     }
+
+    private void removeRows(List<Block[]> rows) {
+        for (Block[] row : rows) {
+            for (Block block : row) {
+                block.setTetromino(null);
+            }
+        }
+    }
+
 }
