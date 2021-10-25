@@ -59,7 +59,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                 if (gameUpdate) {
                     if (gameManager.collision()) {
                         gameManager.setCurrentTetrominoNull();
-                       if(gameManager.checkRows()) {
+                       if(gameManager.isAnyRowFull()) {
                            removeRows = true;
                            fps = 0;
                            targetFrameCount = -1;
@@ -101,7 +101,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                 frames++;
                 totalFramesCount++;
                 if (totalFramesCount == targetFrameCount) {
-                    System.out.println("setting gameUpdate to true!");
+//                    System.out.println("setting gameUpdate to true!");
                     gameUpdate = true;
                 } else if (totalFramesCount == targetAnimateFrame) {
                     fps++;
