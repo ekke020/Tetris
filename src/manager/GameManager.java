@@ -14,6 +14,7 @@ public class GameManager {
     private final Player player;
     private final Block[][] tetrisBlocks;
     private final List<Block[]> fullRows = new ArrayList<>();
+    private boolean hide = false;
 
     public Tetromino getCurrentTetromino() {
         return currentTetromino;
@@ -74,12 +75,13 @@ public class GameManager {
         }
     }
 
-    public void animateRows(boolean hide) {
+    public void animateRows() {
         for (Block[] fullRow : fullRows) {
             for (Block block : fullRow) {
-                block.setHide(hide);
+                block.setHide(!hide);
             }
         }
+        hide = !hide;
     }
 
     public boolean isAnyRowFull() {
