@@ -1,8 +1,6 @@
 package manager;
 
-import gui.Block;
 import gui.frames.GameFrame;
-import sound.AudioPlayer;
 
 import javax.swing.*;
 
@@ -15,8 +13,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
     private long totalFramesCount = 0;
     private long targetFrameCount = GameStats.getGameSpeed();
     private long targetAnimateFrame = -1;
-    private boolean gameUpdate = true;
-    private boolean removeRows = false;
+    private int rowAnimations = 0;
 
     public GameLoop(GameFrame gameFrame, GameManager gameManager) {
         this.gameFrame = gameFrame;
@@ -24,26 +21,24 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
     }
 
     public void requestUpdate() {
-        if (!removeRows)
-            gameUpdate = true;
+        if (GameLoopState.getLoopState() != GameLoopState.ROW_DELETE)
+            GameLoopState.setLoopState(GameLoopState.GRAVITY);
     }
 
     @Override
     protected Boolean doInBackground() {
         running = true;
-        boolean render = false;
-        boolean hide = true;
+        boolean render;
 
-        double firstTime = 0;
+        double firstTime;
         double lastTime = System.nanoTime() / 1000000000.0;
-        double passedTime = 0;
+        double passedTime;
         double unprocessedTime = 0;
 
         double frameTime = 0;
         int frames = 0; // Frames that has passed.
         int fps = 0; // Frames per seconds.
         while(running) {
-            // TODO: Refactor this pile! (It works!) (fps is a borrowed int)
             render = false;
             // We divide our nanoseconds by one billion to make them into milliseconds. We take nanoTime to make it as accurate as possible
             firstTime = System.nanoTime() / 1000000000.0;
@@ -56,34 +51,12 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                 unprocessedTime -= UPDATE_CAP;
                 render = true;
 
-                if (gameUpdate) {
-                    if (gameManager.collision()) {
-                        gameManager.setCurrentTetrominoNull();
-                       if(gameManager.isAnyRowFull()) {
-                           removeRows = true;
-                           fps = 0;
-                           targetFrameCount = -1;
-                       } else {
-                           gameManager.updateCurrentTetromino();
-                           targetFrameCount = totalFramesCount + 1;
-                       }
-                    } else {
-                        targetFrameCount = totalFramesCount + GameStats.getGameSpeed();
-                    }
-                    gameUpdate = false;
+                switch (GameLoopState.getLoopState()) {
+                    case GRAVITY -> callForGravity();
+                    case ROW_DELETE -> deleteRows();
+                    case WAITING -> isGameOver();
                 }
-                if (removeRows) {
-                    gameManager.animateRows(hide);
-                    hide = !hide;
-                    if (fps == 5) {
-                        gameManager.updateCurrentTetromino();
-                        gameUpdate = true;
-                        gameManager.moveEverythingDown();
-                    } else {
-                        targetAnimateFrame = totalFramesCount + 20;
-                    }
-                    removeRows = false;
-                }
+
                 if (frameTime >= 1.0) {
                     frameTime = 0;
 //                    fps = frames;
@@ -101,14 +74,46 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                 frames++;
                 totalFramesCount++;
                 if (totalFramesCount == targetFrameCount) {
-//                    System.out.println("setting gameUpdate to true!");
-                    gameUpdate = true;
+                    GameLoopState.setLoopState(GameLoopState.GRAVITY);
                 } else if (totalFramesCount == targetAnimateFrame) {
-                    fps++;
-                    removeRows = true;
+                    rowAnimations++;
+                    GameLoopState.setLoopState(GameLoopState.ROW_DELETE);
                 }
             }
         }
         return true;
+    }
+
+    private void callForGravity() {
+        if (gameManager.collision()) {
+            gameManager.setCurrentTetrominoNull();
+            if(gameManager.isAnyRowFull()) {
+                GameLoopState.setLoopState(GameLoopState.ROW_DELETE);
+                rowAnimations = 0;
+                targetFrameCount = -1;
+            } else {
+                gameManager.updateCurrentTetromino();
+                targetFrameCount = totalFramesCount + 1;
+            }
+        } else {
+            targetFrameCount = totalFramesCount + GameStats.getGameSpeed();
+            GameLoopState.setLoopState(GameLoopState.WAITING);
+        }
+    }
+
+    private void deleteRows() {
+        gameManager.animateRows();
+        if (rowAnimations == 5) {
+            gameManager.updateCurrentTetromino();
+            GameLoopState.setLoopState(GameLoopState.GRAVITY);
+            gameManager.moveEverythingDown();
+        } else {
+            targetAnimateFrame = totalFramesCount + 20;
+            GameLoopState.setLoopState(GameLoopState.WAITING);
+        }
+    }
+
+    private void isGameOver() {
+
     }
 }
