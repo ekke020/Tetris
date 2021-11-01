@@ -17,7 +17,7 @@ public class GameMovement {
     }
 
     public void moveLeft() {
-        if (getCurrentTetromino() == null) {
+        if (getCurrentTetromino() == null || GameLoop.isPaused()) {
             return;
         }
         if (isMoveLegal(-1)) {
@@ -29,7 +29,7 @@ public class GameMovement {
     }
 
     public void moveRight() {
-        if (getCurrentTetromino() == null) {
+        if (getCurrentTetromino() == null || GameLoop.isPaused()) {
             return;
         }
         if (isMoveLegal(1)) {

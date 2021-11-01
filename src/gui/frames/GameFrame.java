@@ -51,12 +51,12 @@ public class GameFrame extends JPanel {
         System.out.println("Width: " + tetrisBlocks[0][0].getWidth() + "\nHeight: " + tetrisBlocks[0][0].getHeight());
         switch (GameState.getGameState()) {
             case PAUSE -> {
-//                gameManager.getTimer().stop();
+                GameLoop.setPaused(true);
                 AudioPlayer.play(AudioPlayer.PAUSE);
                 AudioPlayer.pauseBackgroundMusic();
             }
             case PLAY -> {
-//                gameManager.getTimer().start();
+                GameLoop.setPaused(false);
                 AudioPlayer.resumeBackgroundMusic();
             }
         }
