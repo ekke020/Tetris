@@ -47,6 +47,9 @@ public class NewGame extends JPanel {
         gameMenu.setMenuListener(e -> {
             switch (e.getId()) {
                 case 0 -> {
+                    if (GameLoopState.getLoopState() == GameLoopState.GAME_OVER) {
+                        return;
+                    }
                     GameState.changeState();
                     gameFrame.switchStates();
                     e.getMenuButton().setText(GameState.getStateName());
