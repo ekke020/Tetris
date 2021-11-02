@@ -11,7 +11,7 @@ public class Colors {
 
     // Miscellaneous
     public static final Color MISC_BACKGROUND = new Color(89, 89, 89, 255);
-
+    public static final Color GAME_OVER_COLOR = new Color(63, 58, 58);
     // Buttons
     public static final Color BUTTON_BACKGROUND_COLOR = new Color(102, 102, 102, 255);
     public static final Color BUTTON_FOREGROUND_COLOR = new Color(179, 179, 179, 255);
