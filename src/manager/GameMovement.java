@@ -106,7 +106,7 @@ public class GameMovement {
 
     public void hardDrop() {
         //TODO: Increase score based on the rows dropped.
-        if (getCurrentTetromino() == null) {
+        if (getCurrentTetromino() == null || GameLoop.isPaused()) {
             return;
         }
         gameManager.setCurrentTetrominoInBlock(false);
