@@ -1,6 +1,8 @@
 package manager;
 
 import gui.frames.GameFrame;
+import sound.AudioPlayer;
+import sound.SoundPaths;
 
 import javax.swing.*;
 
@@ -8,20 +10,24 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
 
     private static boolean running = true;
     private static boolean paused = false;
+    private boolean waiting = false;
+
     private final GameFrame gameFrame;
     private final GameManager gameManager;
     private final double UPDATE_CAP = 1.0/60.0;
     private long totalFramesCount = 0;
     private long targetFrameCount = GameStats.getGameSpeed();
     private long targetAnimateFrame = -1;
+    private long targetEndOfGameFrame = -1;
     private int rowAnimations = 0;
+    private int[] block = {23, 11};
 
     public static void setPaused(boolean paused) {
         GameLoop.paused = paused;
     }
 
     public static boolean isPaused() {
-        return paused;
+        return GameLoop.paused;
     }
 
     public GameLoop(GameFrame gameFrame, GameManager gameManager) {
@@ -30,8 +36,10 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
     }
 
     public void requestUpdate() {
-        if (GameLoopState.getLoopState() != GameLoopState.ROW_DELETE)
+        if (GameLoopState.getLoopState() != GameLoopState.ROW_DELETE) {
+            waiting = false;
             GameLoopState.setLoopState(GameLoopState.GRAVITY);
+        }
     }
 
     @Override
@@ -61,12 +69,13 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                     unprocessedTime -= UPDATE_CAP;
                     render = true;
 
-                    switch (GameLoopState.getLoopState()) {
-                        case GRAVITY -> callForGravity();
-                        case ROW_DELETE -> deleteRows();
-                        case WAITING -> isGameOver();
+                    if (!waiting) {
+                        switch (GameLoopState.getLoopState()) {
+                            case GRAVITY -> callForGravity();
+                            case ROW_DELETE -> deleteRows();
+                            case GAME_OVER -> endOfGame();
+                        }
                     }
-
                     if (frameTime >= 1.0) {
                         frameTime = 0;
 //                    fps = frames;
@@ -84,14 +93,20 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                     frames++;
                     totalFramesCount++;
                     if (totalFramesCount == targetFrameCount) {
+                        waiting = false;
                         GameLoopState.setLoopState(GameLoopState.GRAVITY);
                     } else if (totalFramesCount == targetAnimateFrame) {
+                        waiting = false;
                         rowAnimations++;
                         GameLoopState.setLoopState(GameLoopState.ROW_DELETE);
+                    } else if (totalFramesCount == targetEndOfGameFrame) {
+                        waiting = false;
+                        GameLoopState.setLoopState(GameLoopState.GAME_OVER);
                     }
                 }
             }
         }
+        System.out.println("Exiting");
         return true;
     }
 
@@ -108,8 +123,9 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
             }
         } else {
             targetFrameCount = totalFramesCount + GameStats.getGameSpeed();
-            GameLoopState.setLoopState(GameLoopState.WAITING);
         }
+        waiting = true;
+        isGameOver();
     }
 
     private void deleteRows() {
@@ -120,11 +136,34 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
             gameManager.moveEverythingDown();
         } else {
             targetAnimateFrame = totalFramesCount + 20;
-            GameLoopState.setLoopState(GameLoopState.WAITING);
+            waiting = true;
         }
     }
 
     private void isGameOver() {
+        if (gameManager.isGameOver()) {
+            gameManager.setCurrentTetrominoInBlock(true);
+            gameManager.setCurrentTetrominoNull();
+            targetAnimateFrame = -1;
+            targetFrameCount = -1;
+            targetEndOfGameFrame = totalFramesCount + 1;
+            AudioPlayer.pauseBackgroundMusic();
+            AudioPlayer.play(AudioPlayer.GAME_OVER);
+        }
+    }
 
+    private void endOfGame() {
+        gameManager.setEndOfGameShape(block);
+        block[1]--;
+        if (block[1] == -1) {
+            block[1] = 11;
+            block[0]--;
+        }
+        targetEndOfGameFrame = totalFramesCount + 1;
+        waiting = true;
+        if (block[0] == -1) {
+            paused = true;
+            running = false;
+        }
     }
 }
