@@ -2,7 +2,7 @@ package manager;
 
 public enum GameLoopState {
 
-    GRAVITY, ROW_DELETE, WAITING;
+    GRAVITY, ROW_DELETE, GAME_OVER;
 
     private static GameLoopState loopState = GameLoopState.GRAVITY;
 
