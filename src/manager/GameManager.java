@@ -15,13 +15,20 @@ public class GameManager {
     private final Block[][] tetrisBlocks;
     private final List<Block[]> fullRows = new ArrayList<>();
     private boolean hide = false;
+    private boolean gameOver = false;
 
     public Tetromino getCurrentTetromino() {
         return currentTetromino;
     }
+
     public void setCurrentTetrominoNull() {
         currentTetromino = null;
     }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
     public GameManager(Block[][] tetrisBlocks, Player player) {
         this.tetrisBlocks = tetrisBlocks;
         this.player = player;
@@ -41,6 +48,8 @@ public class GameManager {
             if (rowCoordinate < 23) {
                 Tetromino tetromino = tetrisBlocks[rowCoordinate + 1][colCoordinate].getTetromino();
                 if (tetromino != currentTetromino && tetromino != null) {
+                    if (rowCoordinate == 0)
+                        gameOver = true;
                     stop = true;
                 }
             }
@@ -169,4 +178,7 @@ public class GameManager {
         }
     }
 
+    public void setEndOfGameShape(int[] coordinates) {
+        tetrisBlocks[coordinates[0]][coordinates[1]].setTetromino(new EndOfGameShape());
+    }
 }
