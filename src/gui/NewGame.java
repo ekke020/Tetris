@@ -1,5 +1,6 @@
 package gui;
 
+import colors.Colors;
 import gui.frames.GameFrame;
 import gui.menu.game.GameMenu;
 import keybinds.KeyBinder;
@@ -23,6 +24,7 @@ public class NewGame extends JPanel {
     public NewGame(int width, int height) {
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
+        setBackground(Colors.BACKGROUND_COLOR);
 
         addMenu((int) (width * 0.38), height);
         addNewPlayer();

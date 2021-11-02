@@ -1,6 +1,5 @@
 package gui.frames;
 
-import colors.Colors;
 import gui.Block;
 import manager.*;
 import sound.AudioPlayer;
@@ -22,7 +21,7 @@ public class GameFrame extends JPanel {
     public GameFrame(int width, int height) {
         setLayout(new GridLayout(24, 12));
         addBorder();
-        setBackground(Colors.BACKGROUND_COLOR);
+        setOpaque(false);
         setPreferredSize(new Dimension(width, height));
         createBoard();
     }

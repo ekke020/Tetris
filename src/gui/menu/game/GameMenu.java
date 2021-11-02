@@ -29,7 +29,7 @@ public class GameMenu extends JPanel {
     public GameMenu(int width, int height) {
 
         setPreferredSize(new Dimension(width, height));
-        setBackground(Colors.BACKGROUND_COLOR);
+        setOpaque(false);
         addBorder();
         setLayout(new GridBagLayout());
 
