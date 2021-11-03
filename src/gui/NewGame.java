@@ -77,7 +77,7 @@ public class NewGame extends JPanel {
     }
 
     private void addGameManager() {
-        gameManager = new GameManager(gameFrame.getTetrisBlocks(), player);
+        gameManager = new GameManager(player);
     }
 
     private void startGame() {
@@ -86,7 +86,7 @@ public class NewGame extends JPanel {
     }
 
     private void addKeyBindings() {
-        GameMovement gameMovement = new GameMovement(gameManager, gameFrame.getTetrisBlocks());
+        GameMovement gameMovement = new GameMovement();
         gameMovement.setGameMovementListener(() -> gameLoop.requestUpdate());
 
         KeyBinder.addKeyBinding(this, KeybindingLoader.getKeybinding("MOVE_LEFT"),
