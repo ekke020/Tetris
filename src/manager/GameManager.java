@@ -39,7 +39,7 @@ public class GameManager {
 
     public void updateCurrentTetromino() {
         currentTetromino = player.loadNewTetromino();
-        player.increaseScoreByHardDroppedRows();
+        player.increaseScoreByDroppedRows();
         checkIfGameIsOver();
     }
 

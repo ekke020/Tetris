@@ -3,11 +3,17 @@ package manager;
 public class GameStats {
 
     private static int gameSpeed;
-    private static int softDrop = 1;
+    private static int dropSpeed = 1;
     private static int hardDropRows = 0;
+    private static int softDropRows = 0;
+    private static boolean softDropSwitch = false;
+
+    public static boolean isSoftDropSwitch() {
+        return softDropSwitch;
+    }
 
     public static int getGameSpeed() {
-        return gameSpeed / softDrop;
+        return gameSpeed / dropSpeed;
     }
 
     public static int getHardDropRows() {
@@ -18,11 +24,27 @@ public class GameStats {
         GameStats.hardDropRows = hardDropRows;
     }
 
+    public static int getSoftDropRows() {
+        return softDropRows;
+    }
+
+    public static void increaseSoftDropRows() {
+        softDropRows++;
+    }
+
+    public static void resetSoftDropRows() {
+        softDropRows = 0;
+    }
     public static void toggleSoftDrop(boolean on) {
+        if (softDropSwitch && on) {
+            return;
+        }
         if (on) {
-            softDrop = 3;
+            softDropSwitch = true;
+            dropSpeed = 3;
         } else {
-            softDrop = 1;
+            softDropSwitch = false;
+            dropSpeed = 1;
         }
     }
     public static int calculateLineScore(int level, int lines) {

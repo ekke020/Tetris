@@ -51,9 +51,11 @@ public class Player {
         }
     }
 
-    public void increaseScoreByHardDroppedRows() {
+    public void increaseScoreByDroppedRows() {
         score += GameStats.getHardDropRows() * 2;
+        score += GameStats.getSoftDropRows();
         GameStats.setHardDropRows(0);
+        GameStats.resetSoftDropRows();
         updateFields();
     }
 

@@ -124,6 +124,9 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
             }
         } else {
             targetFrameCount = totalFramesCount + GameStats.getGameSpeed();
+            if (GameStats.isSoftDropSwitch()) {
+                GameStats.increaseSoftDropRows();
+            }
         }
         waiting = true;
         isGameOver();
