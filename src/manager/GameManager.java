@@ -39,6 +39,7 @@ public class GameManager {
 
     public void updateCurrentTetromino() {
         currentTetromino = player.loadNewTetromino();
+        player.increaseScoreByHardDroppedRows();
         checkIfGameIsOver();
     }
 
@@ -177,7 +178,7 @@ public class GameManager {
     }
 
     private void updateElements(int lines) {
-        player.increaseScore(lines);
+        player.increaseScoreByRowsRemoved(lines);
     }
 
     private void removeRows(List<Block[]> rows) {

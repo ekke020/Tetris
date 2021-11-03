@@ -111,6 +111,7 @@ public class GameMovement {
         }
         getCurrentTetromino().setCoordinates(getCurrentTetromino().getCoordinates());
         setCurrentTetrominoInBlock(true);
+        GameStats.setHardDropRows(row);
         gameMovementListener.moveEventOccurred();
     }
 

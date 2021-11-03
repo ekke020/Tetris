@@ -35,7 +35,7 @@ public class Player {
         Collections.shuffle(activeTetrominos);
     }
 
-    public void increaseScore(int lines) {
+    public void increaseScoreByRowsRemoved(int lines) {
         score += GameStats.calculateLineScore(level, lines);
         this.lines += lines;
         checkIfLevelUp();
@@ -49,6 +49,12 @@ public class Player {
             GameStats.setGameSpeed(level);
             AudioPlayer.play(AudioPlayer.LEVEL_UP);
         }
+    }
+
+    public void increaseScoreByHardDroppedRows() {
+        score += GameStats.getHardDropRows() * 2;
+        GameStats.setHardDropRows(0);
+        updateFields();
     }
 
     private void updateFields() {

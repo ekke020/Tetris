@@ -4,9 +4,18 @@ public class GameStats {
 
     private static int gameSpeed;
     private static int softDrop = 1;
+    private static int hardDropRows = 0;
 
     public static int getGameSpeed() {
         return gameSpeed / softDrop;
+    }
+
+    public static int getHardDropRows() {
+        return hardDropRows;
+    }
+
+    public static void setHardDropRows(int hardDropRows) {
+        GameStats.hardDropRows = hardDropRows;
     }
 
     public static void toggleSoftDrop(boolean on) {
