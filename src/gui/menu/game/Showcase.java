@@ -33,7 +33,7 @@ public class Showcase extends JPanel {
     public void updateShowcase(Tetromino tetromino) {
         removeOldShowCase();
         for (int[] coordinates : tetromino.getCoordinates()) {
-            windowBlocks[coordinates[0] + 1][coordinates[1] - 3].setTetromino(tetromino);
+            windowBlocks[coordinates[0]][coordinates[1] - 3].setTetromino(tetromino);
         }
     }
 
