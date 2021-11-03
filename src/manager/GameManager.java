@@ -7,17 +7,20 @@ import tetromino.*;
 
 import java.util.*;
 
+import static gui.frames.GameFrame.TETRIS_BLOCKS;
+import static gui.frames.GameFrame.boardSize;
+
 
 public class GameManager {
 
-    private Tetromino currentTetromino;
+    private static Tetromino currentTetromino;
     private final Player player;
-    private final Block[][] tetrisBlocks;
     private final List<Block[]> fullRows = new ArrayList<>();
     private boolean hide = false;
     private boolean gameOver = false;
 
-    public Tetromino getCurrentTetromino() {
+
+    public static Tetromino getCurrentTetromino() {
         return currentTetromino;
     }
 
@@ -29,14 +32,23 @@ public class GameManager {
         return gameOver;
     }
 
-    public GameManager(Block[][] tetrisBlocks, Player player) {
-        this.tetrisBlocks = tetrisBlocks;
+    public GameManager(Player player) {
         this.player = player;
         updateCurrentTetromino();
     }
 
     public void updateCurrentTetromino() {
         currentTetromino = player.loadNewTetromino();
+        checkIfGameIsOver();
+    }
+
+    private void checkIfGameIsOver() {
+        for (int[] coordinate : currentTetromino.getCoordinates()) {
+            if (TETRIS_BLOCKS[coordinate[0] + 1][coordinate[1]].getTetromino() != null) {
+                gameOver = true;
+                break;
+            }
+        }
     }
 
     public boolean collision() {
@@ -45,15 +57,13 @@ public class GameManager {
         for (int[] coordinates : currentTetrominoCoordinates) {
             int rowCoordinate = coordinates[0];
             int colCoordinate = coordinates[1];
-            if (rowCoordinate < 23) {
-                Tetromino tetromino = tetrisBlocks[rowCoordinate + 1][colCoordinate].getTetromino();
+            if (rowCoordinate < boardSize) {
+                Tetromino tetromino = TETRIS_BLOCKS[rowCoordinate + 1][colCoordinate].getTetromino();
                 if (tetromino != currentTetromino && tetromino != null) {
-                    if (rowCoordinate == 0)
-                        gameOver = true;
                     stop = true;
                 }
             }
-            if (rowCoordinate == 23 || stop) {
+            if (rowCoordinate == boardSize || stop) {
                 AudioPlayer.play(AudioPlayer.TETROMINO_LANDING);
                 return true;
             }
@@ -72,14 +82,14 @@ public class GameManager {
         setCurrentTetrominoInBlock(true);
     }
 
-    public void setCurrentTetrominoInBlock(boolean tetromino) {
+    public static void setCurrentTetrominoInBlock(boolean tetromino) {
         for (int[] coordinates : currentTetromino.getCoordinates()) {
             int rowCoordinate = coordinates[0];
             int colCoordinate = coordinates[1];
             if (tetromino) {
-                tetrisBlocks[rowCoordinate][colCoordinate].setTetromino(currentTetromino);
+                TETRIS_BLOCKS[rowCoordinate][colCoordinate].setTetromino(currentTetromino);
             } else {
-                tetrisBlocks[rowCoordinate][colCoordinate].setTetromino(null);
+                TETRIS_BLOCKS[rowCoordinate][colCoordinate].setTetromino(null);
             }
         }
     }
@@ -96,7 +106,7 @@ public class GameManager {
     public boolean isAnyRowFull() {
         boolean delete;
         int lines = 0;
-        for (Block[] blocks : tetrisBlocks) {
+        for (Block[] blocks : TETRIS_BLOCKS) {
             delete = true;
             for (Block block : blocks) {
                 Tetromino tetromino = block.getTetromino();
@@ -137,9 +147,9 @@ public class GameManager {
             int lines = entry.getValue().size();
             for (int row = bottomMostRow - lines; row > 0; row--) {
                 for (int collum = 0; collum < 12; collum++) {
-                    Tetromino tetromino = tetrisBlocks[row][collum].getTetromino();
-                    tetrisBlocks[row][collum].setTetromino(null);
-                    tetrisBlocks[row + lines][collum].setTetromino(tetromino);
+                    Tetromino tetromino = TETRIS_BLOCKS[row][collum].getTetromino();
+                    TETRIS_BLOCKS[row][collum].setTetromino(null);
+                    TETRIS_BLOCKS[row + lines][collum].setTetromino(tetromino);
                 }
             }
         }
@@ -179,6 +189,6 @@ public class GameManager {
     }
 
     public void setEndOfGameShape(int[] coordinates) {
-        tetrisBlocks[coordinates[0]][coordinates[1]].setTetromino(new EndOfGameShape());
+        TETRIS_BLOCKS[coordinates[0]][coordinates[1]].setTetromino(new EndOfGameShape());
     }
 }
