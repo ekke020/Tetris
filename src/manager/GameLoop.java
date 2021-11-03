@@ -20,7 +20,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
     private long targetAnimateFrame = -1;
     private long targetEndOfGameFrame = -1;
     private int rowAnimations = 0;
-    private int[] block = {23, 11};
+    private final int[] block = {25, 11};
 
     public static void setPaused(boolean paused) {
         GameLoop.paused = paused;
@@ -115,8 +115,9 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
             gameManager.setCurrentTetrominoNull();
             if(gameManager.isAnyRowFull()) {
                 GameLoopState.setLoopState(GameLoopState.ROW_DELETE);
-                rowAnimations = 0;
+                rowAnimations = -1;
                 targetFrameCount = -1;
+                targetAnimateFrame = totalFramesCount + 1;
             } else {
                 gameManager.updateCurrentTetromino();
                 targetFrameCount = totalFramesCount + 1;
@@ -142,7 +143,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
 
     private void isGameOver() {
         if (gameManager.isGameOver()) {
-            gameManager.setCurrentTetrominoInBlock(true);
+            GameManager.setCurrentTetrominoInBlock(true);
             gameManager.setCurrentTetrominoNull();
             targetAnimateFrame = -1;
             targetFrameCount = -1;
@@ -161,7 +162,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
         }
         targetEndOfGameFrame = totalFramesCount + 1;
         waiting = true;
-        if (block[0] == -1) {
+        if (block[0] == 1) {
             paused = true;
             running = false;
         }
