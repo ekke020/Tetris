@@ -12,11 +12,8 @@ import java.awt.*;
 
 public class GameFrame extends JPanel {
 
-    private Block[][] tetrisBlocks;
-
-    public Block[][] getTetrisBlocks() {
-        return tetrisBlocks;
-    }
+    public static final Block[][] TETRIS_BLOCKS = new Block[26][12];
+    public static final int boardSize = TETRIS_BLOCKS.length - 1;
 
     public GameFrame(int width, int height) {
         setLayout(new GridLayout(24, 12));
@@ -27,12 +24,12 @@ public class GameFrame extends JPanel {
     }
 
     private void createBoard() {
-        tetrisBlocks = new Block[24][12];
 
-        for (int i = 0; i < tetrisBlocks.length; i++) {
-            for (int j = 0; j < tetrisBlocks[i].length; j++) {
-                tetrisBlocks[i][j] = new Block(i, j);
-                add(tetrisBlocks[i][j]);
+        for (int i = 0; i < TETRIS_BLOCKS.length; i++) {
+            for (int j = 0; j < TETRIS_BLOCKS[i].length; j++) {
+                TETRIS_BLOCKS[i][j] = new Block(i, j);
+                if (i > 1)
+                    add(TETRIS_BLOCKS[i][j]);
             }
         }
     }
@@ -47,7 +44,7 @@ public class GameFrame extends JPanel {
     }
 
     public void switchStates() {
-        System.out.println("Width: " + tetrisBlocks[0][0].getWidth() + "\nHeight: " + tetrisBlocks[0][0].getHeight());
+        System.out.println("Width: " + TETRIS_BLOCKS[0][0].getWidth() + "\nHeight: " + TETRIS_BLOCKS[0][0].getHeight());
         switch (GameState.getGameState()) {
             case PAUSE -> {
                 GameLoop.setPaused(true);
