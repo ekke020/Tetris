@@ -5,10 +5,10 @@ import java.awt.*;
 public class TShape extends Tetromino {
 
     public TShape() {
-        this.coordinates[0] = new int[]{0, 5};
-        this.coordinates[1] = new int[]{1, 4};
-        this.coordinates[2] = new int[]{1, 5};
-        this.coordinates[3] = new int[]{1, 6};
+        this.coordinates[0] = new int[]{1, 5};
+        this.coordinates[1] = new int[]{2, 4};
+        this.coordinates[2] = new int[]{2, 5};
+        this.coordinates[3] = new int[]{2, 6};
         this.color = Color.MAGENTA;
 
         this.firstRotation = new int[][]{
