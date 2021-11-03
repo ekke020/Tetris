@@ -1,20 +1,15 @@
 package manager;
 
-import gui.Block;
 import sound.AudioPlayer;
 import tetromino.Tetromino;
-
+import static gui.frames.GameFrame.TETRIS_BLOCKS;
+import static gui.frames.GameFrame.boardSize;
+import static manager.GameManager.getCurrentTetromino;
+import static manager.GameManager.setCurrentTetrominoInBlock;
 
 public class GameMovement {
 
-    private final GameManager gameManager;
-    private final Block[][] tetrisBlocks;
     private GameMovementListener gameMovementListener;
-
-    public GameMovement(GameManager gameManager, Block[][] tetrisBlocks) {
-        this.gameManager = gameManager;
-        this.tetrisBlocks = tetrisBlocks;
-    }
 
     public void moveLeft() {
         if (getCurrentTetromino() == null || GameLoop.isPaused()) {
@@ -41,13 +36,13 @@ public class GameMovement {
     }
 
     private boolean isMoveLegal(int direction) {
-        for (int[] coordinates : getCurrentTetrominoCoordinates()) {
+        for (int[] coordinates : getCurrentTetromino().getCoordinates()) {
             int rowCoordinate = coordinates[0];
             int colCoordinate = coordinates[1] + direction;
             if (colCoordinate < 0 || colCoordinate > 11) {
                 return false;
             }
-            Tetromino tetromino = tetrisBlocks[rowCoordinate][colCoordinate].getTetromino();
+            Tetromino tetromino = TETRIS_BLOCKS[rowCoordinate][colCoordinate].getTetromino();
             if (tetromino != getCurrentTetromino() && tetromino != null) {
                 return false;
             }
@@ -56,12 +51,12 @@ public class GameMovement {
     }
 
     private void move(int direction) {
-        gameManager.setCurrentTetrominoInBlock(false);
-        for (int[] coordinates : getCurrentTetrominoCoordinates()) {
+        setCurrentTetrominoInBlock(false);
+        for (int[] coordinates : getCurrentTetromino().getCoordinates()) {
             coordinates[1] += direction;
         }
-        getCurrentTetromino().setCoordinates(getCurrentTetrominoCoordinates());
-        gameManager.setCurrentTetrominoInBlock(true);
+        getCurrentTetromino().setCoordinates(getCurrentTetromino().getCoordinates());
+        setCurrentTetrominoInBlock(true);
     }
 
     public void spin() {
@@ -71,9 +66,9 @@ public class GameMovement {
         int[][] updatedCoordinates = getCurrentTetromino().getSpinCoordinates();
 
         if (isSpinLegal(updatedCoordinates)) {
-            gameManager.setCurrentTetrominoInBlock(false);
+            setCurrentTetrominoInBlock(false);
             getCurrentTetromino().setCoordinates(updatedCoordinates);
-            gameManager.setCurrentTetrominoInBlock(true);
+            setCurrentTetrominoInBlock(true);
             getCurrentTetromino().incrementSpinCounter();
             AudioPlayer.play(AudioPlayer.SPIN);
         }
@@ -83,13 +78,13 @@ public class GameMovement {
         for (int[] coordinates : updatedCoordinates) {
             int rowCoordinate = coordinates[0];
             int colCoordinate = coordinates[1];
-            if (rowCoordinate < 0 || rowCoordinate > 23) {
+            if (rowCoordinate < 0 || rowCoordinate > boardSize) {
                 return false;
             }
             if (colCoordinate < 0 || colCoordinate > 11) {
                 return false;
             }
-            Tetromino tetromino = tetrisBlocks[rowCoordinate][colCoordinate].getTetromino();
+            Tetromino tetromino = TETRIS_BLOCKS[rowCoordinate][colCoordinate].getTetromino();
             if (tetromino != getCurrentTetromino() && tetromino != null) {
                 return false;
             }
@@ -109,13 +104,13 @@ public class GameMovement {
         if (getCurrentTetromino() == null || GameLoop.isPaused()) {
             return;
         }
-        gameManager.setCurrentTetrominoInBlock(false);
+        setCurrentTetrominoInBlock(false);
         int row = getNewRowNumber();
-        for (int[] coordinates : getCurrentTetrominoCoordinates()) {
+        for (int[] coordinates : getCurrentTetromino().getCoordinates()) {
             coordinates[0] += row;
         }
-        getCurrentTetromino().setCoordinates(getCurrentTetrominoCoordinates());
-        gameManager.setCurrentTetrominoInBlock(true);
+        getCurrentTetromino().setCoordinates(getCurrentTetromino().getCoordinates());
+        setCurrentTetrominoInBlock(true);
         gameMovementListener.moveEventOccurred();
     }
 
@@ -123,31 +118,23 @@ public class GameMovement {
         int row = 1;
         int rowCoordinate = 0;
         while (true) {
-            for (int[] coordinates : getCurrentTetrominoCoordinates()) {
+            for (int[] coordinates : getCurrentTetromino().getCoordinates()) {
                 rowCoordinate = coordinates[0] + row;
                 int colCoordinate = coordinates[1];
-                if (rowCoordinate > 23) {
+                if (rowCoordinate > boardSize) {
                     row--;
                     break;
                 }
-                Tetromino tetromino = tetrisBlocks[rowCoordinate][colCoordinate].getTetromino();
+                Tetromino tetromino = TETRIS_BLOCKS[rowCoordinate][colCoordinate].getTetromino();
                 if (tetromino != getCurrentTetromino() && tetromino != null) {
                     return row - 1;
                 }
             }
-            if (rowCoordinate >= 23) {
+            if (rowCoordinate >= boardSize) {
                 return row;
             }
             row++;
         }
-    }
-
-    private Tetromino getCurrentTetromino() {
-        return gameManager.getCurrentTetromino();
-    }
-
-    private int[][] getCurrentTetrominoCoordinates() {
-        return getCurrentTetromino().getCoordinates();
     }
 
     public void setGameMovementListener(GameMovementListener listener) {
