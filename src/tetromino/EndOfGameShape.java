@@ -1,6 +1,6 @@
 package tetromino;
 
-import colors.Colors;
+import staticAssets.Colors;
 
 public class EndOfGameShape extends Tetromino {
 
