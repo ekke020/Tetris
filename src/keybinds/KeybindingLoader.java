@@ -14,9 +14,9 @@ public class KeybindingLoader implements java.io.Serializable {
     static {
         defaultKeybindings.put("MOVE_LEFT", KeyEvent.VK_LEFT);
         defaultKeybindings.put("MOVE_RIGHT", KeyEvent.VK_RIGHT);
-        defaultKeybindings.put("SPIN", KeyEvent.VK_SPACE);
+        defaultKeybindings.put("SPIN", KeyEvent.VK_UP);
         defaultKeybindings.put("SOFT_DROP", KeyEvent.VK_DOWN);
-        defaultKeybindings.put("HARD_DROP", KeyEvent.VK_UP);
+        defaultKeybindings.put("HARD_DROP", KeyEvent.VK_SPACE);
         defaultKeybindings.put("PAUSE", KeyEvent.VK_P);
     }
 
@@ -32,7 +32,6 @@ public class KeybindingLoader implements java.io.Serializable {
         return keybindings.containsValue(keyCode);
     }
 
-    //TODO: Refactor all the methods using try catch blocks!
     @SuppressWarnings("unchecked")
     public static void loadKeybindings() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(KEYBINDINGS))) {
@@ -40,18 +39,16 @@ public class KeybindingLoader implements java.io.Serializable {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Failed to read from file....");
             keybindings.putAll(defaultKeybindings);
-            try {
-                createKeybindings();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            createKeybindings();
         }
     }
 
-    private static void createKeybindings() throws IOException {
+    private static void createKeybindings() {
         System.out.println("Creating a new " + KEYBINDINGS);
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(KEYBINDINGS))){
             out.writeObject(defaultKeybindings);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -18,8 +18,10 @@ public class KeyBinder {
         });
     }
 
-    public static void removeKeyBinding(JComponent comp, int keyCode, String id, boolean onKeyRelease) {
-        InputMap inMap = comp.getInputMap(JComponent.WHEN_FOCUSED);
-        inMap.put(KeyStroke.getKeyStroke(keyCode, 0, onKeyRelease), id);
+    public static void removeKeyBinding(JComponent comp, int keyCode, boolean onKeyRelease) {
+        InputMap inMap = comp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap ap = comp.getActionMap();
+        inMap.put(KeyStroke.getKeyStroke(keyCode, 0, onKeyRelease), null);
+        ap.remove(KeyStroke.getKeyStroke(keyCode, 0, onKeyRelease));
     }
 }
