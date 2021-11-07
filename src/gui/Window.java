@@ -12,6 +12,7 @@ public class Window extends JFrame {
 
     private MainMenu mainMenu;
     private SettingsFrame settingsFrame;
+    private NewGame newGame;
 
     public Window() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -42,7 +43,14 @@ public class Window extends JFrame {
     }
 
     private void addNewGame(int level) {
-        NewGame newGame = new NewGame(getWidth() - 16, getHeight() - 39, level);
+        newGame = new NewGame(getWidth() - 16, getHeight() - 39, level);
+        newGame.setEnterListener(() -> {
+            remove(newGame);
+            addSettings();
+            revalidate();
+            repaint();
+            AudioPlayer.play(AudioPlayer.MENU);
+        });
         add(newGame);
     }
 
