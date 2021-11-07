@@ -47,6 +47,8 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
     @Override
     protected Boolean doInBackground() {
         running = true;
+        paused = false;
+        GameLoopState.setLoopState(GameLoopState.GRAVITY);
         boolean render;
 
         double firstTime;
