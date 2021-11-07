@@ -1,4 +1,4 @@
-package colors;
+package staticAssets;
 
 import java.awt.*;
 
@@ -12,6 +12,8 @@ public class Colors {
     // Miscellaneous
     public static final Color MISC_BACKGROUND = new Color(89, 89, 89, 255);
     public static final Color GAME_OVER_COLOR = new Color(63, 58, 58);
+    public static final Color LEVEL_SELECT_COLOR = new Color(125, 125, 125);
+    public static final Color LEVEL_SELECTED_COLOR = new Color(255, 255, 255);
     // Buttons
     public static final Color BUTTON_BACKGROUND_COLOR = new Color(102, 102, 102, 255);
     public static final Color BUTTON_FOREGROUND_COLOR = new Color(179, 179, 179, 255);
