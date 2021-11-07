@@ -15,7 +15,8 @@ public class Player {
     private ArrayList<Tetromino> activeTetrominos;
     private PlayerListener playerListener;
 
-    public Player() {
+    public Player(int level) {
+        this.level = level;
         reloadTetrominos();
         GameStats.setGameSpeed(level);
     }
