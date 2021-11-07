@@ -1,6 +1,6 @@
 package gui;
 
-import colors.Colors;
+import staticAssets.Colors;
 import gui.frames.GameFrame;
 import gui.menu.game.GameMenu;
 import keybinds.KeyBinder;
@@ -21,13 +21,13 @@ public class NewGame extends JPanel {
     private GameManager gameManager;
     private GameLoop gameLoop;
 
-    public NewGame(int width, int height) {
+    public NewGame(int width, int height, int level) {
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
         setBackground(Colors.BACKGROUND_COLOR);
 
         addMenu((int) (width * 0.38), height);
-        addNewPlayer();
+        addNewPlayer(level);
         addNewGame((int) (width * 0.62), height);
         addGameManager();
 
@@ -61,8 +61,8 @@ public class NewGame extends JPanel {
         add(gameMenu, gc);
     }
 
-    private void addNewPlayer() {
-        player = new Player();
+    private void addNewPlayer(int level) {
+        player = new Player(level);
         player.setPlayerListener(e -> {
             gameMenu.updateMenu(e.getTetromino(), e.getLevel(), e.getScore(), e.getLines());
             gameMenu.repaint();

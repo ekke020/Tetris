@@ -1,80 +1,145 @@
 package gui.frames;
 
-import colors.Colors;
+import gui.NewGameListener;
+import gui.menu.settings.*;
+import staticAssets.Colors;
 import gui.ComponentResizeListener;
-import gui.menu.MenuButton;
-import gui.menu.MenuListener;
-import gui.menu.settings.BindingPanel;
-import gui.menu.settings.SoundSliderPanel;
+import keybinds.KeyBinder;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
-// TODO: Add different color modes.
 
 public class SettingsFrame extends JPanel {
 
-    private MenuListener menuListener;
-    private MenuButton backButton;
-    private BindingPanel bindingPanel;
-    private SoundSliderPanel soundSliderPanel;
-    private final GridBagConstraints gc;
+    private SelectedOptionPanel optionPanel;
 
-    public SettingsFrame(int width, int height) {
+    private NewGameListener newGameListener;
+    private final GridBagConstraints gc;
+    private final MenuOption[] panels = new MenuOption[4];
+
+    private int index = 0;
+    public SettingsFrame() {
         setBackground(Colors.BACKGROUND_COLOR);
 
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-        gc.weightx = 1;
-        gc.weighty = 0.1;
 
-        addBindingPanel(width / 3, height / 3);
-        addSoundSliderPanel(width / 2, height / 6);
-        addBackButton(width / 3, height / 16);
+        addKeyBinding();
+        addVolume();
+        addLevelSelect();
+        addStartGame();
+        addSelectedOptionPanel();
         addComponentListener(new ComponentResizeListener() {
             @Override
             public void resizeTimedOut() {
                 setComponentSizes();
             }
         });
+        setKeyBindings();
     }
 
-    private void addBindingPanel(int width, int height) {
-        bindingPanel = new BindingPanel(width, height);
-
-        add(bindingPanel, gc);
+    private void addKeyBinding() {
+        MenuOption option = new MenuOption("KEYBINDING");
+        option.addSettingsListener(() -> {
+            optionPanel.addBindingPanel();
+        });
+        option.addEnterListener(() -> {
+            optionPanel.focusPanel();
+        });
+        panels[0] = option;
+        gc.weighty = 1;
+        gc.anchor = GridBagConstraints.PAGE_END;
+        add(option, gc);
     }
 
-    private void addSoundSliderPanel(int width, int height) {
-        soundSliderPanel = new SoundSliderPanel(width, height);
+    private void addVolume() {
+        MenuOption option = new MenuOption("VOLUME");
+        option.addSettingsListener(() -> {
+            optionPanel.addSoundSliderPanel();
+        });
+        option.addEnterListener(() -> {
+            optionPanel.focusPanel();
+        });
+        panels[1] = option;
         gc.gridy = 1;
-        add(soundSliderPanel, gc);
+        gc.weighty = 0;
+        gc.anchor = GridBagConstraints.PAGE_START;
+        add(option, gc);
     }
 
-    private void addBackButton(int buttonWidth, int buttonHeight) {
-        backButton = new MenuButton("Back",buttonWidth, buttonHeight);
-        backButton.addActionListener(e -> menuListener.formEventOccurred(null));
-
+    private void addLevelSelect() {
+        MenuOption option = new MenuOption("LEVEL SELECT");
+        option.addSettingsListener(() -> {
+            optionPanel.addLevelSelectPanel();
+        });
+        option.addEnterListener(() -> {
+            optionPanel.focusPanel();
+        });
+        panels[2] = option;
         gc.gridy = 2;
-        gc.anchor = GridBagConstraints.LAST_LINE_START;
-        gc.gridwidth = GridBagConstraints.REMAINDER;
-
-        add(backButton, gc);
+        add(option, gc);
     }
 
-    public void setMenuListener(MenuListener menuListener) {
-        this.menuListener = menuListener;
+    private void addStartGame() {
+        MenuOption option = new MenuOption("START GAME");
+        option.addSettingsListener(() -> {
+            optionPanel.addStartGamePanel();
+        });
+        option.addEnterListener(() -> {
+            int level = optionPanel.getSelectedLevel();
+            newGameListener.newGameEventOccurred(level);
+        });
+        panels[3] = option;
+        gc.gridy = 3;
+        gc.weighty = 0.5;
+        add(option, gc);
+    }
+
+    private void addSelectedOptionPanel() {
+        optionPanel = new SelectedOptionPanel();
+        optionPanel.addReturnListener(() -> {
+            panels[index].requestFocusInWindow();
+            setKeyBindings();
+        });
+        optionPanel.addListenerToPanels();
+        gc.gridy = 4;
+        gc.anchor = GridBagConstraints.CENTER;
+        add(optionPanel, gc);
+    }
+
+    private void setKeyBindings() {
+        KeyBinder.addKeyBinding(this, KeyEvent.VK_DOWN, "DOWN", true, e -> {
+            index++;
+            if (index == panels.length)
+                index = 0;
+            panels[index].requestFocusInWindow();
+        });
+        KeyBinder.addKeyBinding(this, KeyEvent.VK_UP, "UP", true, e -> {
+            index--;
+            if (index == -1)
+                index = panels.length - 1;
+            panels[index].requestFocusInWindow();
+        });
+    }
+
+    public void setNewGameListener(NewGameListener listener) {
+        this.newGameListener = listener;
     }
 
     private void setComponentSizes() {
-        // Update all the component sizes here.
-        backButton.setPreferredSize(new Dimension(getWidth() / 3, getHeight() / 16));
-        bindingPanel.setPreferredSize(new Dimension(getWidth() / 3, getHeight() / 3));
-        soundSliderPanel.setPreferredSize(new Dimension(getWidth() / 2, getHeight() / 6));
+        panels[index].requestFocusInWindow();
+        int width = getWidth() / 2;
+        if (width > 500)
+            width = 500;
+        optionPanel.setPreferredSize(new Dimension(width, getHeight() / 4));
+        for (MenuOption panel : panels) {
+            panel.setPreferredSize(new Dimension(width, getHeight() / 24));
+        }
         SwingUtilities.updateComponentTreeUI(this);
     }
+
 }
 

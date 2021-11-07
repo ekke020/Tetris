@@ -10,11 +10,8 @@ import java.awt.*;
 
 public class Window extends JFrame {
 
-    private final GridBagConstraints gc;
-
     private MainMenu mainMenu;
     private SettingsFrame settingsFrame;
-
 
     public Window() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -24,8 +21,6 @@ public class Window extends JFrame {
         setIconImage(image.getImage());
 
         KeybindingLoader.loadKeybindings();
-        setLayout(new GridBagLayout());
-        gc = new GridBagConstraints();
 
         pack();
         addMainMenu();
@@ -37,60 +32,28 @@ public class Window extends JFrame {
 
     private void addMainMenu() {
         mainMenu = new MainMenu(getWidth() - 16, getHeight() - 39);
-        mainMenu.setMenuListener(e -> {
-            switch (e.getId()) {
-                case 0 -> {
-                    remove(mainMenu);
-                    AudioPlayer.play(AudioPlayer.GAME);
-                    addNewGame();
-                }
-                case 1 -> {
-                    remove(mainMenu);
-                    addSettings();
-                }
-
-            }
+        mainMenu.setEnterListener(() -> {
+            remove(mainMenu);
+            addSettings();
             revalidate();
             repaint();
         });
-        gc.gridx = 0;
-        gc.gridy = 0;
-
-        gc.fill = GridBagConstraints.BOTH;
-        gc.weightx = 1;
-        gc.weighty = 0.1;
-
-        add(mainMenu, gc);
+        add(mainMenu);
     }
 
-    private void addNewGame() {
-        NewGame newGame = new NewGame(getWidth() - 16, getHeight() - 39);
-
-        gc.gridx = 0;
-        gc.gridy = 0;
-
-        gc.fill = GridBagConstraints.BOTH;
-        gc.weightx = 1;
-        gc.weighty = 0.1;
-
-        add(newGame, gc);
+    private void addNewGame(int level) {
+        NewGame newGame = new NewGame(getWidth() - 16, getHeight() - 39, level);
+        add(newGame);
     }
 
     private void addSettings() {
-        settingsFrame = new SettingsFrame(getWidth() - 16, getHeight() - 39);
-        settingsFrame.setMenuListener(e -> {
+        settingsFrame = new SettingsFrame();
+        settingsFrame.setNewGameListener(e -> {
             remove(settingsFrame);
-            addMainMenu();
+            addNewGame(e);
             revalidate();
             repaint();
         });
-        gc.gridx = 0;
-        gc.gridy = 0;
-
-        gc.fill = GridBagConstraints.BOTH;
-        gc.weightx = 1;
-        gc.weighty = 0.1;
-
-        add(settingsFrame, gc);
+        add(settingsFrame);
     }
 }
