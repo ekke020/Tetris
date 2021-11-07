@@ -1,5 +1,6 @@
 package gui.menu.settings;
 
+import gui.EnterListener;
 import staticAssets.Colors;
 import staticAssets.Fonts;
 import keybinds.KeyBinder;
