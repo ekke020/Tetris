@@ -1,5 +1,7 @@
 package gui.menu;
 
+import gui.menu.game.MenuButton;
+
 import java.util.EventObject;
 
 public class MenuClicks extends EventObject {

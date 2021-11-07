@@ -1,32 +1,25 @@
 package gui.menu.main;
 
-import colors.Colors;
-import gui.ComponentResizeListener;
-import gui.menu.MenuButton;
-import gui.menu.MenuClicks;
-import gui.menu.MenuListener;
+import gui.menu.settings.EnterListener;
+import staticAssets.Colors;
+import keybinds.KeyBinder;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.awt.event.KeyEvent;
 
 
 public class MainMenu extends JPanel {
 
-    private MenuListener menuListener;
+    private EnterListener enterListener;
     private final GridBagConstraints gc;
-    private final MenuButton[] buttonList = new MenuButton[3];
-    private final int buttonWidth;
-    private final int buttonHeight;
-    
+    private LogoPanel logoPanel;
+    private MenuDecoration decoration;
+    private EnterGamePanel enterGamePanel;
+
     public MainMenu(int width, int height) {
         setBackground(Colors.BACKGROUND_COLOR);
         setPreferredSize(new Dimension(width, height));
-        buttonWidth = width / 3;
-        buttonHeight = height / 16;
         setLayout(new GridBagLayout());
         gc = new GridBagConstraints();
         gc.gridx = 0;
@@ -35,87 +28,34 @@ public class MainMenu extends JPanel {
         gc.weightx = 1;
         gc.weighty = 0.1;
 
-        addLogo();
-        addBackgroundImage();
-        addNewGameButton();
-        addOptionsButton();
-        addHighScoreButton();
-        addComponentListener(new ComponentResizeListener() {
-            @Override
-            public void resizeTimedOut() {
-                setComponentSizes();
-            }
+        addLogoPanel();
+        addTetromino();
+        addEnterGameLabel();
+        KeyBinder.addKeyBinding(this, KeyEvent.VK_ENTER, "ENTER", true, e -> {
+            logoPanel.getTimer().stop();
+            decoration.getTimer().stop();
+            enterGamePanel.getTimer().stop();
+            enterListener.enterEventOccurred();
         });
     }
 
-    private void addLogo() {
-        Path path = Paths.get("assets/Tetris_Logo.png");
-        ImageLabel tetrisLogo = new ImageLabel(path, 759, 221);
-        add(tetrisLogo, gc);
+    private void addLogoPanel() {
+        logoPanel = new LogoPanel(getPreferredSize().width, getPreferredSize().height / 5);
+        add(logoPanel, gc);
     }
-
-    private void addNewGameButton() {
-        MenuButton button = new MenuButton("New Game", buttonWidth, buttonHeight);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MenuClicks mc = new MenuClicks(this, 0);
-                menuListener.formEventOccurred(mc);
-            }
-        });
-        buttonList[0] = button;
+    private void addTetromino() {
+        decoration = new MenuDecoration(getPreferredSize().width, getPreferredSize().height / 10);
         gc.gridy = 1;
-        gc.weighty = 0.01;
-        add(button, gc);
+        add(decoration, gc);
     }
-
-    private void addOptionsButton() {
-        MenuButton button = new MenuButton("Options", buttonWidth, buttonHeight);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MenuClicks mc = new MenuClicks(this, 1);
-                menuListener.formEventOccurred(mc);
-            }
-        });
-        buttonList[1] = button;
+    private void addEnterGameLabel() {
+        enterGamePanel = new EnterGamePanel(getPreferredSize().width, getPreferredSize().height / 10);
         gc.gridy = 2;
-        add(button, gc);
+        add(enterGamePanel, gc);
     }
 
-    private void addHighScoreButton() {
-        MenuButton button = new MenuButton("High score", buttonWidth, buttonHeight);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MenuClicks mc = new MenuClicks(this, 2);
-                menuListener.formEventOccurred(mc);
-            }
-        });
-        buttonList[2] = button;
-        gc.gridy = 3;
-        gc.weighty = 0.1;
-        add(button, gc);
-    }
-
-    private void addBackgroundImage() {
-        Path path = Paths.get("assets/MainMenuImage.png");
-        ImageLabel backgroundImage = new ImageLabel(path, 707, 213);
-        gc.anchor = GridBagConstraints.PAGE_START;
-        gc.gridy = 4;
-        gc.weighty = 0.6;
-        add(backgroundImage, gc);
-    }
-
-    private void setComponentSizes() {
-        for (MenuButton button : buttonList){
-            button.setPreferredSize(new Dimension(getWidth() / 3, getHeight() / 16));
-        }
-        SwingUtilities.updateComponentTreeUI(this);
-    }
-
-    public void setMenuListener(MenuListener menuListener) {
-        this.menuListener = menuListener;
+    public void setEnterListener(EnterListener listener) {
+        this.enterListener = listener;
     }
 
 }

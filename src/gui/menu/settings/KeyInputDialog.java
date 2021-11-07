@@ -1,7 +1,6 @@
 package gui.menu.settings;
 
-import colors.Colors;
-import keybinds.KeyBinder;
+import staticAssets.Colors;
 import keybinds.KeybindingLoader;
 
 import javax.swing.*;
