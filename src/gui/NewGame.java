@@ -1,5 +1,6 @@
 package gui;
 
+import sound.AudioPlayer;
 import staticAssets.Colors;
 import gui.frames.GameFrame;
 import gui.menu.game.GameMenu;
@@ -10,10 +11,12 @@ import player.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class NewGame extends JPanel {
 
     private final GridBagConstraints gc;
+    private EnterListener enterListener;
 
     private GameMenu gameMenu;
     private GameFrame gameFrame;
@@ -66,7 +69,6 @@ public class NewGame extends JPanel {
         player.setPlayerListener(e -> {
             gameMenu.updateMenu(e.getTetromino(), e.getLevel(), e.getScore(), e.getLines());
             gameMenu.repaint();
-
         });
     }
 
@@ -88,7 +90,11 @@ public class NewGame extends JPanel {
             gameMenu.removeAll();
             gameMenu.repaint();
             gameMenu.revalidate();
+            KeyBinder.addKeyBinding(this, KeyEvent.VK_ENTER, "ENTER", true, e -> {
+                enterListener.enterEventOccurred();
+            });
         });
+        AudioPlayer.play(AudioPlayer.GAME);
     }
 
     private void addKeyBindings() {
@@ -119,4 +125,9 @@ public class NewGame extends JPanel {
         gameMenu.setPreferredSize(new Dimension((int) (getWidth() * 0.38), getHeight()));
         SwingUtilities.updateComponentTreeUI(this);
     }
+
+    public void setEnterListener(EnterListener listener) {
+        this.enterListener = listener;
+    }
+
 }
