@@ -83,6 +83,12 @@ public class NewGame extends JPanel {
     private void startGame() {
         gameLoop = new GameLoop(gameFrame, gameManager);
         gameLoop.execute();
+        gameLoop.setGameOverEventListener(() -> {
+            gameFrame.showEndGameScreen(player.getScore());
+            gameMenu.removeAll();
+            gameMenu.repaint();
+            gameMenu.revalidate();
+        });
     }
 
     private void addKeyBindings() {

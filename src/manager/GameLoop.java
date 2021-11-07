@@ -8,6 +8,8 @@ import javax.swing.*;
 
 public class GameLoop extends SwingWorker<Boolean, Integer> {
 
+    private GameOverEventListener gameOverEventListener;
+
     private static boolean running = true;
     private static boolean paused = false;
     private boolean waiting = false;
@@ -106,7 +108,7 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
                 }
             }
         }
-        System.out.println("Exiting");
+        gameOverEventListener.gameOverEventOccurred();
         return true;
     }
 
@@ -169,5 +171,9 @@ public class GameLoop extends SwingWorker<Boolean, Integer> {
             paused = true;
             running = false;
         }
+    }
+
+    public void setGameOverEventListener(GameOverEventListener listener) {
+        gameOverEventListener = listener;
     }
 }

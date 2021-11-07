@@ -15,6 +15,10 @@ public class Player {
     private ArrayList<Tetromino> activeTetrominos;
     private PlayerListener playerListener;
 
+    public int getScore() {
+        return score;
+    }
+
     public Player(int level) {
         this.level = level;
         reloadTetrominos();
