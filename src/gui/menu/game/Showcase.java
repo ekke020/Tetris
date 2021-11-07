@@ -1,6 +1,6 @@
 package gui.menu.game;
 
-import colors.Colors;
+import staticAssets.Colors;
 import gui.Block;
 import tetromino.*;
 

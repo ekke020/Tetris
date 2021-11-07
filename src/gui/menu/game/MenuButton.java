@@ -1,6 +1,6 @@
-package gui.menu;
+package gui.menu.game;
 
-import colors.Colors;
+import staticAssets.Colors;
 import keybinds.KeyBinder;
 
 import javax.swing.*;
@@ -25,8 +25,8 @@ public class MenuButton extends JButton implements ChangeListener {
         UIManager.put("Button.select", Colors.PRESSED_COLOR);
 
         addChangeListener(this);
-        KeyBinder.removeKeyBinding(this, KeyEvent.VK_SPACE, "none", false);
-        KeyBinder.removeKeyBinding(this, KeyEvent.VK_SPACE, "none", true);
+        KeyBinder.removeKeyBinding(this, KeyEvent.VK_SPACE, false);
+        KeyBinder.removeKeyBinding(this, KeyEvent.VK_SPACE, true);
     }
 
     @Override

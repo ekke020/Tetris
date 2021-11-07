@@ -1,7 +1,6 @@
 package gui.menu.game;
 
-import colors.Colors;
-import gui.menu.MenuButton;
+import staticAssets.Colors;
 import gui.menu.MenuClicks;
 import gui.menu.MenuListener;
 import keybinds.KeybindingLoader;
