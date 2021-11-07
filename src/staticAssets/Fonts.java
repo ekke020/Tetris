@@ -25,7 +25,7 @@ public class Fonts {
     private static void loadFonts() {
         try {
             FONTS_LIST.add(
-                    Font.createFont(Font.TRUETYPE_FONT, MAIN_MENU_FONT_PATH.toFile()).deriveFont(Font.PLAIN,100)
+                    Font.createFont(Font.TRUETYPE_FONT, MAIN_MENU_FONT_PATH.toFile()).deriveFont(Font.PLAIN,200)
             );
             FONTS_LIST.add(Font.createFont(
                     Font.TRUETYPE_FONT, TEXT_FONT_PATH.toFile()).deriveFont(Font.PLAIN,20)

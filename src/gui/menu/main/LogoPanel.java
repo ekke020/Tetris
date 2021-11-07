@@ -1,17 +1,15 @@
 package gui.menu.main;
 
 
+import staticAssets.Fonts;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.nio.file.Path;
 
 public class LogoPanel extends JPanel implements ActionListener {
 
-    private final Path logoPath = Path.of("assets/Fonts/Main_Menu_Font.otf");
-    private Font tetrisFont;
     private final JLabel[] logo = {
             new JLabel("t"), new JLabel("e"), new JLabel("t"),
             new JLabel("r"), new JLabel("i"), new JLabel("s")
@@ -32,8 +30,7 @@ public class LogoPanel extends JPanel implements ActionListener {
         setOpaque(false);
         setPreferredSize(new Dimension(width, height));
         setLayout(new FlowLayout());
-        loadFont();
-        tetrisFont = tetrisFont.deriveFont(Font.PLAIN,200f);
+        Font tetrisFont = Fonts.getFont(Fonts.MAIN_MENU_FONT);
         for (JLabel jLabel : logo) {
             jLabel.setFont(tetrisFont);
             jLabel.setForeground(colors[0]);
@@ -42,13 +39,6 @@ public class LogoPanel extends JPanel implements ActionListener {
         timer.start();
     }
 
-    private void loadFont() {
-        try {
-            tetrisFont = Font.createFont(Font.TRUETYPE_FONT, logoPath.toFile());
-        } catch (IOException | FontFormatException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public void actionPerformed(ActionEvent e) {
         for (int i = 0; i < logoIndex; i++) {
